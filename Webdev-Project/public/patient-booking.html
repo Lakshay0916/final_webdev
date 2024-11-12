@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment Booking</title>
+  <link rel="stylesheet" href="patient-booking.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Appointment Booking</h1>
+
+    <!-- Doctor Selection Section -->
+    <div class="doctor-section">
+      <h2>Select a Doctor</h2>
+      <div class="doctors">
+        <div class="doctor" onclick="selectDoctor('drJaneDoe')">
+          <img src="doctor1.jpg" alt="Doctor Jane Doe">
+          <p>Dr. Jane Doe</p>
+          <p>Neurology</p>
+        </div>
+        <div class="doctor" onclick="selectDoctor('drRosaHernandez')">
+          <img src="doctor2.jpg" alt="Doctor Rosa Hernandez">
+          <p>Dr. Rosa Hernandez</p>
+          <p>Dermatology</p>
+        </div>
+        <div class="doctor" onclick="selectDoctor('drJohnDoe')">
+          <img src="doctor3.jpg" alt="Doctor John Doe">
+          <p>Dr. John Doe</p>
+          <p>Cardiology</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Date Selection -->
+    <div class="date-section">
+      <h2>Select Date</h2>
+      <input type="date" id="appointment-date" onchange="updateSlots()">
+    </div>
+
+    <!-- Slot Availability -->
+    <div class="slot-section">
+      <h2>Available Slots</h2>
+      <div class="slots" id="slots">
+        <!-- Slots will be dynamically added here -->
+      </div>
+    </div>
+
+    <!-- Appointment Type -->
+    <div class="appointment-type-section">
+      <h2>Appointment Type</h2>
+      <select id="appointment-type">
+        <option value="online">Online</option>
+        <option value="offline">Offline</option>
+      </select>
+    </div>
+
+    <!-- Service and Description -->
+    <div class="service-section">
+      <h2>Service</h2>
+      <select id="service">
+        <option value="consultation">Consultation - $100</option>
+        <option value="follow-up">Follow-up - $50</option>
+      </select>
+    </div>
+
+    <div class="description-section">
+      <h2>Additional Notes</h2>
+      <textarea id="description" rows="4" placeholder="Add any additional information..."></textarea>
+    </div>
+
+    <!-- Book Appointment Button -->
+    <button class="book-button">Book Appointment</button>
+  </div>
+
+  <script src="patient-booking.js"></script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+{
+    "heart": {
+        "icon": "❤️",
+        "scanType": "Heart Scan",
+        "scanLabel": "CT Scan Image",
+        "metrics": {
+            "heartRate": {
+                "title": "Heart Rate",
+                "chartData": {
+                    "labels": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                    "data": [72, 75, 82, 78, 76, 80, 81],
+                    "type": "line",
+                    "label": "Heart Rate (BPM)",
+                    "yAxisMin": 60,
+                    "yAxisMax": 100
+                }
+            },
+            "bloodPressure": {
+                "title": "Blood Pressure",
+                "value": "130/90 mm Hg"
+            },
+            "pulse": {
+                "title": "Pulse",
+                "value": "81 beats/min"
+            }
+        },
+        "foodsToAvoid": [
+            { "icon": "🍔", "name": "Burgers" },
+            { "icon": "🍟", "name": "Fries" },
+            { "icon": "🍝", "name": "Pasta" }
+        ]
+    },
+    "brain": {
+        "icon": "🧠",
+        "scanType": "Brain MRI",
+        "scanLabel": "MRI Scan Image",
+        "metrics": {
+            "neuralActivity": {
+                "title": "Neural Activity",
+                "chartData": {
+                    "labels": ["Alpha", "Beta", "Theta", "Delta"],
+                    "data": [65, 82, 45, 70],
+                    "type": "bar",
+                    "label": "Brain Wave Activity",
+                    "yAxisMin": 0,
+                    "yAxisMax": 100
+                }
+            },
+            "cognitiveTests": {
+                "title": "Cognitive Tests",
+                "values": [
+                    { "label": "Memory", "value": "95%" },
+                    { "label": "Attention", "value": "88%" },
+                    { "label": "Processing Speed", "value": "92%" }
+                ]
+            },
+            "sleepQuality": {
+                "title": "Sleep Quality",
+                "values": [
+                    { "label": "Average", "value": "7.2 hours" },
+                    { "label": "Deep Sleep", "value": "32%" }
+                ]
+            }
+        },
+        "recommendations": [
+            "Maintain regular sleep schedule",
+            "Practice stress management"
+        ]
+    },
+    "kidney": {
+        "icon": "🫘",
+        "scanType": "Kidney Ultrasound",
+        "scanLabel": "Ultrasound Image",
+        "metrics": {
+            "kidneyFunction": {
+                "title": "Kidney Function",
+                "chartData": {
+                    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                    "data": [92, 94, 93, 95, 94, 95],
+                    "type": "line",
+                    "label": "Filtration Rate",
+                    "yAxisMin": 80,
+                    "yAxisMax": 100
+                }
+            },
+            "measurements": [
+                { "title": "Creatinine", "value": "0.9 mg/dL" },
+                { "title": "GFR", "value": "95 mL/min" },
+                { "title": "BUN", "value": "15 mg/dL" },
+                { "title": "Uric Acid", "value": "5.2 mg/dL" }
+            ]
+        },
+        "hydrationStatus": {
+            "current": "Adequate",
+            "recommendation": "2.5L daily"
+        }
+    },
+    "eyes": {
+        "icon": "👁️",
+        "scanType": "Eye Examination",
+        "scanLabel": "Retinal Scan",
+        "metrics": {
+            "vision": [
+                { "title": "Vision (Left)", "value": "-1.25" },
+                { "title": "Vision (Right)", "value": "-1.50" },
+                { "title": "Eye Pressure", "value": "14 mmHg" },
+                { "title": "Color Vision", "value": "Normal" }
+            ],
+            "screenTime": {
+                "title": "Screen Time",
+                "chartData": {
+                    "labels": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                    "data": [6.5, 7.2, 6.8, 7.5, 6.2, 4.5, 4.8],
+                    "type": "bar",
+                    "label": "Screen Time (hours)",
+                    "yAxisMin": 0,
+                    "yAxisMax": 10
+                }
+            }
+        },
+        "eyeCareTips": [
+            "Follow 20-20-20 rule",
+            "Use blue light filter",
+            "Next check-up: 3 months"
+        ]
+    }
+}
