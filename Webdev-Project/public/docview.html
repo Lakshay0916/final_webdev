@@ -1,0 +1,519 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Medical Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-50"></div>
+
+    <div class="min-h-screen p-6">
+        <!-- Header -->
+        <header class="mb-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">Patient Medical Records</h1>
+                        <p class="text-gray-600" id="lastUpdated">Last updated: Loading...</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button onclick="saveAllChanges()" id="saveButton" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                            Save Changes
+                        </button>
+                        <button onclick="exportData()" class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50">
+                            Export Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto">
+            <div id="systemTabs" class="mb-6 flex space-x-4 border-b"></div>
+            <div id="contentSections"></div>
+        </main>
+    </div>
+
+    <script>
+        // Global state with localStorage backup
+        let organData = null;
+        let currentSystem = 'heart';
+        let hasUnsavedChanges = false;
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `mb-4 p-4 rounded-lg text-white ${
+                type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            }`;
+            toast.textContent = message;
+            
+            const container = document.getElementById('toastContainer');
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Load data with localStorage fallback
+        async function loadOrganData() {
+            try {
+                // Try to load from localStorage first
+                const cachedData = localStorage.getItem('organData');
+                if (cachedData) {
+                    organData = JSON.parse(cachedData);
+                    showToast('Loaded data from cache');
+                } else {
+                    // Simulate API call to load initial data
+                    const response = await fetch('/organ-data.json');
+                    if (!response.ok) throw new Error('Failed to fetch data');
+                    organData = await response.json();
+                    
+                    // Cache the data
+                    localStorage.setItem('organData', JSON.stringify(organData));
+                    showToast('Loaded fresh data');
+                }
+                
+                initializeDashboard();
+                updateLastUpdated();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showToast('Error loading data. Using fallback data.', 'error');
+                
+                // Use fallback data if everything fails
+                organData = getFallbackData();
+                initializeDashboard();
+            }
+        }
+
+        // Get fallback data
+        function getFallbackData() {
+            return {
+                heart: {
+                    icon: "❤️",
+                    scanType: "Heart Scan",
+                    metrics: {
+                        heartRate: {
+                            title: "Heart Rate",
+                            value: "75 BPM"
+                        }
+                    }
+                }
+            };
+        }
+
+        // Save changes with proper error handling
+        async function saveAllChanges() {
+            const saveButton = document.getElementById('saveButton');
+            saveButton.disabled = true;
+            saveButton.textContent = 'Saving...';
+
+            try {
+                // Simulate API call with artificial delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Save to localStorage as backup
+                localStorage.setItem('organData', JSON.stringify(organData));
+                
+                // In a real application, you would make an API call here
+                // const response = await fetch('/api/save-organ-data', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(organData)
+                // });
+                // if (!response.ok) throw new Error('Failed to save');
+
+                hasUnsavedChanges = false;
+                updateLastUpdated();
+                showToast('Changes saved successfully');
+            } catch (error) {
+                console.error('Save error:', error);
+                showToast('Error saving changes. Data backed up locally.', 'error');
+            } finally {
+                saveButton.disabled = false;
+                saveButton.textContent = 'Save Changes';
+            }
+        }
+
+        // Update metric with validation
+        function updateMetricValue(system, metric, value) {
+            try {
+                const metricData = organData[system].metrics[metric];
+                
+                // Validate the new value
+                if (!validateMetricValue(value, metricData)) {
+                    throw new Error('Invalid value for this metric');
+                }
+                
+                if (metricData.chartData) {
+                    metricData.chartData.data[metricData.chartData.data.length - 1] = parseFloat(value);
+                } else {
+                    metricData.value = value;
+                }
+                
+                hasUnsavedChanges = true;
+                showSystemContent(system);
+                showToast('Metric updated. Remember to save changes.');
+                
+                // Auto-save to localStorage
+                localStorage.setItem('organData', JSON.stringify(organData));
+            } catch (error) {
+                console.error('Update error:', error);
+                showToast(error.message, 'error');
+            }
+        }
+
+        // Validate metric values
+        function validateMetricValue(value, metricData) {
+            if (value === null || value === '') return false;
+            
+            if (metricData.chartData) {
+                const num = parseFloat(value);
+                return !isNaN(num) && 
+                       num >= metricData.chartData.yAxisMin && 
+                       num <= metricData.chartData.yAxisMax;
+            }
+            
+            return true;
+        }
+
+        // Export with error handling
+        function exportData() {
+            try {
+                const dataStr = JSON.stringify(organData, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `organ-data-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showToast('Data exported successfully');
+            } catch (error) {
+                console.error('Export error:', error);
+                showToast('Error exporting data', 'error');
+            }
+        }
+
+        // Edit metric with improved UI
+        function editMetric(system, metric) {
+            const metricData = organData[system].metrics[metric];
+            const currentValue = metricData.value || 
+                (metricData.chartData?.data[metricData.chartData.data.length - 1]);
+            
+            // Create modal for editing
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center';
+            modal.innerHTML = `
+                <div class="bg-white p-6 rounded-lg max-w-md w-full">
+                    <h3 class="text-lg font-semibold mb-4">Edit ${metricData.title}</h3>
+                    <input type="text" value="${currentValue}" 
+                           class="w-full p-2 border rounded mb-4" 
+                           id="metricInput">
+                    <div class="flex justify-end space-x-2">
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                class="px-4 py-2 border rounded">
+                            Cancel
+                        </button>
+                        <button onclick="handleMetricUpdate('${system}', '${metric}')" 
+                                class="px-4 py-2 bg-blue-500 text-white rounded">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function handleMetricUpdate(system, metric) {
+            const input = document.getElementById('metricInput');
+            const value = input.value;
+            
+            if (updateMetricValue(system, metric, value)) {
+                input.parentElement.parentElement.remove();
+            }
+        }
+
+        // Rest of the dashboard initialization code remains the same
+        // ... (include all the other functions from the previous version)
+        function initializeDashboard() {
+            createSystemTabs();
+            showSystemContent(currentSystem);
+            setupEventListeners();
+        }
+
+        // Create system tabs
+        function createSystemTabs() {
+            const tabsContainer = document.getElementById('systemTabs');
+            const systems = Object.keys(organData);
+            
+            systems.forEach(system => {
+                const button = document.createElement('button');
+                button.className = `px-4 py-2 ${system === currentSystem ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-gray-900'}`;
+                button.innerHTML = `${organData[system].icon} ${system.charAt(0).toUpperCase() + system.slice(1)}`;
+                button.onclick = () => switchSystem(system);
+                tabsContainer.appendChild(button);
+            });
+        }
+
+        // Switch between systems
+        function switchSystem(system) {
+            currentSystem = system;
+            updateTabStyles();
+            showSystemContent(system);
+        }
+
+        // Update tab styles
+        function updateTabStyles() {
+            const tabs = document.getElementById('systemTabs').children;
+            Array.from(tabs).forEach(tab => {
+                tab.className = 'px-4 py-2 text-gray-600 hover:text-gray-900';
+                if (tab.textContent.toLowerCase().includes(currentSystem)) {
+                    tab.className = 'px-4 py-2 text-blue-600 border-b-2 border-blue-600';
+                }
+            });
+        }
+
+        // Show system content
+        function showSystemContent(system) {
+            const contentSection = document.getElementById('contentSections');
+            const systemData = organData[system];
+            
+            let metricsHTML = '';
+            
+            // Generate metrics cards based on system data
+            Object.entries(systemData.metrics).forEach(([key, value]) => {
+                if (value.chartData) {
+                    metricsHTML += createChartCard(key, value);
+                } else if (Array.isArray(value)) {
+                    metricsHTML += createListCard(key, value);
+                } else {
+                    metricsHTML += createSimpleMetricCard(key, value);
+                }
+            });
+
+            contentSection.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${metricsHTML}
+                    ${createScanCard(systemData)}
+                </div>
+            `;
+
+            // Initialize charts
+            initializeCharts(system);
+        }
+
+        // Create chart card HTML
+        function createChartCard(key, data) {
+            return `
+                <div class="bg-white p-6 rounded-xl shadow-sm metric-card">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">${data.title}</h3>
+                        <button onclick="editMetric('${currentSystem}', '${key}')" class="text-blue-500 hover:text-blue-600">Edit</button>
+                    </div>
+                    <div class="h-48">
+                        <canvas id="chart_${key}"></canvas>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Create simple metric card HTML
+        function createSimpleMetricCard(key, data) {
+            return `
+                <div class="bg-white p-6 rounded-xl shadow-sm metric-card">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">${data.title}</h3>
+                        <button onclick="editMetric('${currentSystem}', '${key}')" class="text-blue-500 hover:text-blue-600">Edit</button>
+                    </div>
+                    <div class="text-2xl font-bold" id="${key}_value">
+                        ${data.value}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Create scan card HTML
+        function createScanCard(data) {
+            return `
+                <div class="bg-white p-6 rounded-xl shadow-sm metric-card col-span-full">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">${data.scanType}</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="uploadScan('${currentSystem}')" class="text-blue-500 hover:text-blue-600">Upload New</button>
+                            <button onclick="viewScanHistory('${currentSystem}')" class="text-blue-500 hover:text-blue-600">View History</button>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg text-center">
+                        <img src="/api/placeholder/800/400" alt="${data.scanLabel}" class="mx-auto rounded-lg"/>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize charts
+        function initializeCharts(system) {
+            const systemData = organData[system];
+            
+            Object.entries(systemData.metrics).forEach(([key, value]) => {
+                if (value.chartData) {
+                    const ctx = document.getElementById(`chart_${key}`)?.getContext('2d');
+                    if (ctx) {
+                        new Chart(ctx, {
+                            type: value.chartData.type,
+                            data: {
+                                labels: value.chartData.labels,
+                                datasets: [{
+                                    label: value.chartData.label,
+                                    data: value.chartData.data,
+                                    borderColor: 'rgb(59, 130, 246)',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        min: value.chartData.yAxisMin,
+                                        max: value.chartData.yAxisMax
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        // Edit metric
+        function editMetric(system, metric) {
+            const metricData = organData[system].metrics[metric];
+            const newValue = prompt(`Enter new value for ${metricData.title}:`, 
+                metricData.value || (metricData.chartData?.data[metricData.chartData.data.length - 1]));
+            
+            if (newValue !== null) {
+                updateMetricValue(system, metric, newValue);
+            }
+        }
+
+        // Update metric value
+        function updateMetricValue(system, metric, value) {
+            const metricData = organData[system].metrics[metric];
+            
+            if (metricData.chartData) {
+                metricData.chartData.data[metricData.chartData.data.length - 1] = parseFloat(value);
+            } else {
+                metricData.value = value;
+            }
+            
+            hasUnsavedChanges = true;
+            showSystemContent(system);
+            showSaveIndicator();
+        }
+
+        // Save all changes
+        async function saveAllChanges() {
+            try {
+                // In a real application, this would be an API call
+                const response = await fetch('/organ-data.json', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(organData)
+                });
+
+                if (response.ok) {
+                    hasUnsavedChanges = false;
+                    showSaveSuccess();
+                    updateLastUpdated();
+                } else {
+                    throw new Error('Failed to save changes');
+                }
+            } catch (error) {
+                console.error('Error saving data:', error);
+                alert('Error saving changes. Please try again.');
+            }
+        }
+
+        // Export data
+        function exportData() {
+            const dataStr = JSON.stringify(organData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'organ-data.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Show save success indicator
+        function showSaveSuccess() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.style.display = 'block';
+            setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 3000);
+        }
+
+        // Update last updated timestamp
+        function updateLastUpdated() {
+            const timestamp = new Date().toLocaleString();
+            document.getElementById('lastUpdated').textContent = `Last updated: ${timestamp}`;
+        }
+
+        // Upload scan
+        function uploadScan(system) {
+            // Simulate file upload
+            alert('Scan upload functionality would be implemented here');
+        }
+
+        // View scan history
+        function viewScanHistory(system) {
+            // Simulate history view
+            alert('Scan history functionality would be implemented here');
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Warn about unsaved changes when leaving the page
+            window.addEventListener('beforeunload', (e) => {
+                if (hasUnsavedChanges) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+            });
+        }
+
+
+        // Initialize
+        loadOrganData();
+
+        // Add auto-save functionality
+        window.addEventListener('beforeunload', (e) => {
+            if (hasUnsavedChanges) {
+                localStorage.setItem('organData', JSON.stringify(organData));
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
+</body>
+</html>

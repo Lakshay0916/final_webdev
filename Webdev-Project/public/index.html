@@ -14,7 +14,7 @@
         <nav class="navbar">
             <div class="navbar-logo">
                 <img src="Assets/logo.png" alt="VitaCore">
-            </div>
+            </div>/Users/lakshaysinghal/Web/docData.json
 
             <div class="hamburger" id="hamburger">
                 <span class="bar"></span>
@@ -77,7 +77,8 @@
                         <img src="Assets/patient-profile-people.svg" alt="I am a patient">
                         <h3>I am a patient</h3>
                         <p>Say goodbye to boring old appointments, say hello to MyGPConnect.</p>
-                        <button class="login-btn" onclick="login('patient')">Log in</button>
+                        <a href = "login.html">
+                        <button class="login-btn" >Log in</button></a>
                     </div>
                     <div class="card">
                         <img src="Assets/doctor.svg" alt="I am a doctor">
@@ -169,13 +170,7 @@
             }
 
             // Function for login navigation
-            function login(userType) {
-                if (userType === 'patient') {
-                    window.location.href = '/login.html';
-                } else if (userType === 'doctor') {
-                    window.location.href = '/doctor-login.html';
-                }
-            }
+            
 
             // Load services and features on page load
             window.onload = function () {

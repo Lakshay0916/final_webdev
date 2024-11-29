@@ -305,7 +305,7 @@
 </head>
 <body>
     <header class="header">
-        <a href="#" class="logo" onclick="showPage('doctors')">VitaCore</a>
+        <a href="index.html" class="logo" onclick="showPage('doctors')">VitaCore</a>
         <nav class="nav-links">
             <a href="#" onclick="showPage('about')">About</a>
             <a href="#" onclick="showPage('services')">Services</a>
@@ -347,62 +347,47 @@
 
     <script>
         // Doctor information
-        const doctors = {
-            "dr-shreya": {
-                id: "dr-shreya",
-                name: "Dr. Shreya Sharma",
-                specialty: "Psychologist",
-                hospital: "Max Hospital",
-                qualification: "MBBS, MD - Psychology",
-                experience: "8+",
-                satisfaction: "96%",
-                patientsTreated: "5k+",
-                about: "Dr. Shreya Sharma is a dedicated psychologist with over 8 years of experience in treating various psychological conditions. She specializes in cognitive behavioral therapy and has helped numerous patients overcome mental health challenges. Dr. Sharma is known for her empathetic approach and commitment to mental wellness.",
-                specializations: [
-                    "Cognitive Behavioral Therapy",
-                    "Depression Treatment",
-                    "Anxiety Management",
-                    "Stress Counseling"
-                ],
-                imageUrl: "image 25.png"
-            },
-            "dr-rahul": {
-                id: "dr-rahul",
-                name: "Dr. Rahul Verma",
-                specialty: "Cardiologist",
-                hospital: "Max Hospital",
-                qualification: "MBBS, MD - Cardiology",
-                experience: "12+",
-                satisfaction: "98%",
-                patientsTreated: "8k+",
-                about: "Dr. Rahul Verma is a highly experienced cardiologist specializing in interventional cardiology. With over 12 years of practice, he has successfully treated numerous patients with various heart conditions. His expertise includes advanced cardiac procedures and preventive cardiology.",
-                specializations: [
-                    "Interventional Cardiology",
-                    "Cardiac Rehabilitation",
-                    "Heart Disease Prevention",
-                    "Echocardiography"
-                ],
-                imageUrl: "image 25.png"
-            },
-            "dr-priya": {
-                id: "dr-priya",
-                name: "Dr. Priya Patel",
-                specialty: "Pediatrician",
-                hospital: "Max Hospital",
-                qualification: "MBBS, MD - Pediatrics",
-                experience: "10+",
-                satisfaction: "97%",
-                patientsTreated: "7k+",
-                about: "Dr. Priya Patel is a compassionate pediatrician with 10 years of experience in child healthcare. She is known for her gentle approach and ability to connect with young patients. Her focus includes preventive care, developmental pediatrics, and managing chronic conditions in children.",
-                specializations: [
-                    "General Pediatrics",
-                    "Child Development",
-                    "Pediatric Immunology",
-                    "Adolescent Medicine"
-                ],
-                imageUrl: "image 25.png"
-            }
-        };
+       // Initialize doctors object
+let doctors = {};
+
+// Fetch data from docData.json
+fetch('docData.json')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json();
+  })
+  .then(data => {
+    doctors = data; // Store the fetched data in the doctors variable
+    createDoctorCards(); // Call the function to display doctor cards after data is fetched
+  })
+  .catch(error => {
+    console.error('There was a problem with the fetch operation:', error);
+  });
+
+// Function to create doctor cards
+function createDoctorCards() {
+  const doctorList = document.getElementById('doctorList');
+  doctorList.innerHTML = '';
+
+  Object.values(doctors).forEach(doctor => {
+    const doctorCard = `
+      <div class="doctor-card">
+        <img src="${doctor.imageUrl}" alt="${doctor.name}" class="doctor-avatar">
+        <div class="doctor-info">
+          <h2 class="doctor-name">${doctor.name}</h2>
+          <p class="doctor-specialty">${doctor.specialty}</p>
+          <p class="doctor-hospital">${doctor.hospital}</p>
+        </div>
+        <button onclick="showDoctorProfile('${doctor.id}')" class="book-button">BOOK APPOINTMENT</button>
+      </div>
+    `;
+    doctorList.innerHTML += doctorCard;
+  });
+}
+
+        
 
         // Function to show specific page
         function showPage(pageId) {

@@ -231,11 +231,12 @@
         
         <div class="login-section">
             <h1>Login-Doctor</h1>
-            <form id="loginForm" action="/login-doctor" method="POST">
+            <form id="loginForm" method="POST" onsubmit="handleLogin(event)">
                 <input placeholder="Username" type="text" id="username" name="username" class="input-field" required>
                 <input type="password" id="password" name="password" placeholder="••••••••" class="input-field" required>
                 <button type="submit" class="login-button">Login</button>
             </form>
+            
             
             <div class="help-text">Having trouble? <a href="/forgotpassword">Forgot Password</a></div>
             
@@ -255,14 +256,24 @@
         function toggleNavbar() {
             document.querySelector('.nav-links').classList.toggle('active');
         }
-        // Select the button element
-const bookButton = document.querySelector('login-button');
+        function handleLogin(event) {
+        event.preventDefault(); // Prevents the form from submitting traditionally
+        // Here you can add form validation or an authentication check
+        window.location.href = "docview.html"; // Redirect to the desired page
+    }
 
-// Add an event listener for the 'click' event
-bookButton.addEventListener('click', () => {
-    // Redirect to the booking page
-    window.location.href = "doctor-dashboard.html"; // Replace with your actual page URL
-});
+    function toggleNavbar() {
+        document.querySelector('.nav-links').classList.toggle('active');
+    }
+
+        // Select the button element
+// const bookButton = document.querySelector('login-button');
+
+// // Add an event listener for the 'click' event
+// bookButton.addEventListener('click', () => {
+//     // Redirect to the booking page
+//     window.location.href = "doctor-dashboard.html"; // Replace with your actual page URL
+// });
 
     </script>
 </body>

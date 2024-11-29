@@ -1,0 +1,57 @@
+{
+    "dr-shreya": {
+      "id": "dr-shreya",
+      "name": "Dr. Shreya Sharma",
+      "specialty": "Psychologist",
+      "hospital": "Max Hospital",
+      "qualification": "MBBS, MD - Psychology",
+      "experience": "8+",
+      "satisfaction": "96%",
+      "patientsTreated": "5k+",
+      "about": "Dr. Shreya Sharma is a dedicated psychologist...",
+      "specializations": [
+        "Cognitive Behavioral Therapy",
+        "Depression Treatment",
+        "Anxiety Management",
+        "Stress Counseling"
+      ],
+      "imageUrl": "image 25.png"
+    },
+    "dr-rahul": {
+      "id": "dr-rahul",
+      "name": "Dr. Rahul Verma",
+      "specialty": "Cardiologist",
+      "hospital": "Max Hospital",
+      "qualification": "MBBS, MD - Cardiology",
+      "experience": "12+",
+      "satisfaction": "98%",
+      "patientsTreated": "8k+",
+      "about": "Dr. Rahul Verma is a highly experienced cardiologist...",
+      "specializations": [
+        "Interventional Cardiology",
+        "Cardiac Rehabilitation",
+        "Heart Disease Prevention",
+        "Echocardiography"
+      ],
+      "imageUrl": "image 25.png"
+    },
+    "dr-priya": {
+      "id": "dr-priya",
+      "name": "Dr. Priya Patel",
+      "specialty": "Pediatrician",
+      "hospital": "Max Hospital",
+      "qualification": "MBBS, MD - Pediatrics",
+      "experience": "10+",
+      "satisfaction": "97%",
+      "patientsTreated": "7k+",
+      "about": "Dr. Priya Patel is a compassionate pediatrician...",
+      "specializations": [
+        "General Pediatrics",
+        "Child Development",
+        "Pediatric Immunology",
+        "Adolescent Medicine"
+      ],
+      "imageUrl": "image 25.png"
+    }
+  }
+  

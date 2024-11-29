@@ -14,7 +14,6 @@
 
         body {
             background-color: #ffffff;
-            color: #333;
         }
 
         .navbar {
@@ -22,11 +21,6 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 4rem;
-            background-color: #ffffff;
-            color: #18861a;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
         }
 
         .logo {
@@ -34,74 +28,53 @@
             align-items: center;
             gap: 0.5rem;
             font-size: 1.5rem;
+            color: #2D8B7F;
             text-decoration: none;
-            color: #fff;
         }
 
         .logo-icon {
             width: 32px;
             height: 32px;
-            background-color: #fff;
+            background-color: #2D8B7F;
             border-radius: 50%;
         }
 
         .nav-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 2rem;
         }
 
         .nav-links a {
             text-decoration: none;
-            color: #030303;
+            color: #000000;
             font-size: 1rem;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 0.3rem;
-            cursor: pointer;
-        }
-
-        .hamburger div {
-            width: 30px;
-            height: 3px;
-            background-color: rgb(0, 0, 0);
-            border-radius: 5px;
         }
 
         .main-content {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            padding: 2rem 1.5rem;
+            padding: 2rem 4rem;
             min-height: calc(100vh - 80px);
         }
 
         .illustration {
-            max-width: 100%;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .illustration img {
-            max-width: 250px;
-            height: auto;
+            flex: 1;
+            max-width: 600px;
+            background-color: #f0f7f6;
+            padding: 2rem;
+            border-radius: 1rem;
         }
 
         .login-section {
-            width: 100%;
+            flex: 1;
             max-width: 400px;
             padding: 2rem;
-            background-color: #f0f7f6;
-            border-radius: 0.75rem;
         }
 
         .login-section h1 {
             font-size: 2rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            color: #2D8B7F;
+            margin-bottom: 2rem;
         }
 
         .input-field {
@@ -122,26 +95,21 @@
             border-radius: 0.5rem;
             cursor: pointer;
             margin-bottom: 1rem;
-            transition: background-color 0.3s ease;
         }
 
-        .login-button:hover {
-            background-color: #23665e;
-        }
-
-        .help-text, .register-link {
-            text-align: center;
+        .help-text {
+            text-align: right;
             color: #64748b;
             font-size: 0.875rem;
+            margin-bottom: 1rem;
         }
 
         .divider {
             display: flex;
             align-items: center;
-            margin: 1.5rem 0;
+            margin: 1rem 0;
             color: #64748b;
             font-size: 0.875rem;
-            text-align: center;
         }
 
         .divider::before,
@@ -149,7 +117,7 @@
             content: "";
             flex: 1;
             border-bottom: 1px solid #e2e8f0;
-            margin: 0 0.5rem;
+            margin: 0 1rem;
         }
 
         .social-login {
@@ -169,92 +137,55 @@
             justify-content: center;
             cursor: pointer;
             background-color: white;
-            transition: background-color 0.3s ease;
         }
 
-        .social-button:hover {
-            background-color: #f0f0f0;
+        .register-link {
+            text-align: center;
+            color: #2D8B7F;
+            text-decoration: none;
+            font-size: 0.875rem;
         }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 1rem 2rem;
-            }
-            .nav-links {
-                display: none;
-            }
-            .hamburger {
-                display: flex;
-            }
-            .main-content {
-                padding: 1rem;
-            }
-            .illustration img {
-                max-width: 200px;
-            }
-            .nav-links.active {
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                top: 60px;
-                right: 20px;
-                background-color: #2D8B7F;
-                width: 200px;
-                padding: 1rem;
-                border-radius: 0.5rem;
-            }
-        }
-   </style>
+    </style>
 </head>
 <body>
     <nav class="navbar">
-        <div><img src="Assets/logo.png" width="80" alt=""></div>
+        <a href="#" class="logo">
+            <div class="logo-icon"></div>
+            VitaCore
+        </a>
         <div class="nav-links">
-            <a href="index.html">Home</a>
-            <!-- <a href="">Services</a> -->
-            <a href="about.html">About Us</a>
-            <a href="contact.html">Contact</a>
-            <a href="registeration.html">Register</a>
-        </div>
-        <div class="hamburger" onclick="toggleNavbar()">
-            <div></div>
-            <div></div>
-            <div></div>
+            <a href="#">Home</a>
+            <a href="#">Services</a>
+            <a href="#">About Us</a>
         </div>
     </nav>
 
     <main class="main-content">
         <div class="illustration">
-            <img src="Assets/loginPhoto.png" alt="Medical care illustration">
+            <img src="doc1.png" alt="Medical care illustration">
         </div>
         
         <div class="login-section">
             <h1>Login</h1>
-            <form id="loginForm" action="/login" method="POST">
-                <input placeholder="Username" type="text" id="username" name="username" class="input-field" required>
-                <input type="password" id="password" name="password" placeholder="••••••••" class="input-field" required>
+            <form action="dashboard.html" method="GET">
+                <input type="email" placeholder="Enter Email" class="input-field" required>
+                <input type="password" placeholder="••••••••" class="input-field" required>
                 <button type="submit" class="login-button">Login</button>
             </form>
             
-            <div class="help-text">Having trouble? <a href="/forgotpassword">Forgot Password</a></div>
+            
+            <div class="help-text">Having Problem?</div>
             
             <div class="divider">Or continue with</div>
             
             <div class="social-login">
-                <button class="social-button"><img src="Assets/google_logo.webp" width="30" alt="G-logo"></button>
-                <button class="social-button"><img src="Assets/facebook.png" width="30" alt="Facebook logo"></button>
-                <button class="social-button"><img src="Assets/linkedin.png" width="30" alt="LinkedIn logo"></button>
+                <button class="social-button">G</button>
+                <button class="social-button">A</button>
+                <button class="social-button">f</button>
             </div>
             
-            <a href="/register" class="register-link">New User? Register Now</a>
+            <a href="#" class="register-link">New User? Register Now</a>
         </div>
     </main>
-
-    <script>
-        function toggleNavbar() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        }
-    </script>
 </body>
 </html>
