@@ -1,0 +1,260 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+:root {
+    --primary: #45B1A8;
+    --light-bg: #F5F7FA;
+    --text: #2D3748;
+}
+
+body {
+    background: var(--light-bg);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo {
+    color: var(--primary);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text);
+}
+
+.book-btn {
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+}
+
+.tabs {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    background: white;
+    margin-top: 1rem;
+}
+
+.tab {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: var(--primary);
+    color: white;
+}
+
+.stats-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1 1 250px;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--light-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-content {
+    padding: 2rem;
+}
+
+.patient-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.record-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
+.record-tab {
+    padding: 0.5rem 2rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    border: 1px solid #ddd;
+}
+
+.record-tab.active {
+    background: var(--primary);
+    color: white;
+    border: none;
+}
+
+.records-grid {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.organ-visual {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    flex: 1;
+}
+
+.organ-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.stat-box {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    flex: 1 1 200px;
+}
+.stat-box h3{
+    margin-bottom: 1rem;
+
+}
+.foods-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.food-item {
+    text-align: center;
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    flex: 1 1 calc(33.33% - 1rem);
+}
+
+.placeholder-img {
+    width: 100px;
+    height: 100px;
+    background: var(--light-bg);
+    margin: 0 auto;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.organ-content {
+    display: none;
+}
+
+.organ-content.active {
+    display: block;
+}
+
+.scan-image {
+    width: 200px;
+    height: 200px;
+    background: var(--light-bg);
+    margin: 1rem auto;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.metrics-grid {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.warning-box {
+    background: #FEF3C7;
+    border: 1px solid #F59E0B;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* Unified style for both brain and heart content */
+.organ-visual {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    flex: 1;
+    box-shadow: 0 1px 4px var(--shadow);
+    transition: transform var(--transition-duration);
+}
+
+.organ-visual:hover {
+    transform: translateY(-5px);
+}
+
+.organ-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.stat-box {
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    flex: 1 1 200px;
+    box-shadow: 0 1px 4px var(--shadow);
+    transition: transform var(--transition-duration);
+}
+
+.stat-box:hover {
+    transform: translateY(-3px);
+}
+
+/* Additional classes for heart-specific styling if needed */
+.heart-content {
+    display: block;
+}
+
+.heart-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}

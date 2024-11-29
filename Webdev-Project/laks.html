@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaCare</title>
+    <style>
+        .booking-form {
+    background-color: #f8f9fa;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #2b7a78;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #2b7a78;
+}
+
+.booking-section {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.doctor-profile {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            color: #2b7a78;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #2b7a78;
+        }
+
+        .book-btn {
+            background-color: #2b7a78;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+
+        .book-btn:hover {
+            background-color: #236c6a;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .page-title {
+            color: #2b7a78;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .doctor-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .doctor-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .doctor-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #2b7a78;
+        }
+
+        .doctor-info {
+            flex: 1;
+        }
+
+        .doctor-name {
+            color: #2b7a78;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .doctor-specialty {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .doctor-hospital {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .book-button {
+            background-color: #2b7a78;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .book-button:hover {
+            background-color: #236c6a;
+        }
+
+        .doctor-profile {
+            display: none;
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .profile-header {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 3px solid #2b7a78;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-card {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .stat-value {
+            color: #2b7a78;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .profile-content {
+            margin-top: 2rem;
+        }
+
+        .section-title {
+            color: #2b7a78;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .specializations-list {
+            list-style: none;
+            margin-left: 1rem;
+        }
+
+        .specializations-list li {
+            margin-bottom: 0.5rem;
+            color: #666;
+            position: relative;
+        }
+
+        .specializations-list li::before {
+            content: "•";
+            color: #2b7a78;
+            position: absolute;
+            left: -1rem;
+        }
+
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .doctor-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+
+            .doctor-avatar {
+                width: 80px;
+                height: 80px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo" onclick="showPage('doctors')">VitaCore</a>
+        <nav class="nav-links">
+            <a href="#" onclick="showPage('about')">About</a>
+            <a href="#" onclick="showPage('services')">Services</a>
+            <a href="#" onclick="showPage('news')">News</a>
+            <button class="book-btn" onclick="showPage('doctors')">BOOK A DOCTOR</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Doctors List Page -->
+        <div id="doctors-page" class="page-content active">
+            <h1 class="page-title">Top Doctors</h1>
+            <div class="doctor-list" id="doctorList"></div>
+        </div>
+
+        <!-- About Page -->
+        <div id="about-page" class="page-content">
+            <h1 class="page-title">About Us</h1>
+            <p>VitaCore is committed to providing the highest quality healthcare services...</p>
+        </div>
+
+        <!-- Services Page -->
+        <div id="services-page" class="page-content">
+            <h1 class="page-title">Our Services</h1>
+            <p>We offer a wide range of medical services...</p>
+        </div>
+
+        <!-- News Page -->
+        <div id="news-page" class="page-content">
+            <h1 class="page-title">Latest News</h1>
+            <p>Stay updated with the latest healthcare news and updates...</p>
+        </div>
+
+        <!-- Doctor Profile Page -->
+        <div id="profile-page" class="page-content">
+            <div id="doctorProfile"></div>
+        </div>
+    </div>
+
+    <script>
+        // Doctor information
+       // Initialize doctors object
+let doctors = {};
+
+// Fetch data from docData.json
+fetch('docData.json')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json();
+  })
+  .then(data => {
+    doctors = data; // Store the fetched data in the doctors variable
+    createDoctorCards(); // Call the function to display doctor cards after data is fetched
+  })
+  .catch(error => {
+    console.error('There was a problem with the fetch operation:', error);
+  });
+
+// Function to create doctor cards
+function createDoctorCards() {
+  const doctorList = document.getElementById('doctorList');
+  doctorList.innerHTML = '';
+
+  Object.values(doctors).forEach(doctor => {
+    const doctorCard = `
+      <div class="doctor-card">
+        <img src="${doctor.imageUrl}" alt="${doctor.name}" class="doctor-avatar">
+        <div class="doctor-info">
+          <h2 class="doctor-name">${doctor.name}</h2>
+          <p class="doctor-specialty">${doctor.specialty}</p>
+          <p class="doctor-hospital">${doctor.hospital}</p>
+        </div>
+        <button onclick="showDoctorProfile('${doctor.id}')" class="book-button">BOOK APPOINTMENT</button>
+      </div>
+    `;
+    doctorList.innerHTML += doctorCard;
+  });
+}
+
+        
+
+        // Function to show specific page
+        function showPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(`${pageId}-page`).classList.add('active');
+        }
+
+        // Function to create doctor cards
+        function createDoctorCards() {
+            const doctorList = document.getElementById('doctorList');
+            doctorList.innerHTML = '';
+            
+            Object.values(doctors).forEach(doctor => {
+                const doctorCard = `
+                    <div class="doctor-card">
+                        <img src="${doctor.imageUrl}" alt="${doctor.name}" class="doctor-avatar">
+                        <div class="doctor-info">
+                            <h2 class="doctor-name">${doctor.name}</h2>
+                            <p class="doctor-specialty">${doctor.specialty}</p>
+                            <p class="doctor-hospital">${doctor.hospital}</p>
+                        </div>
+                        <button onclick="showDoctorProfile('${doctor.id}')" class="book-button">BOOK APPOINTMENT</button>
+                    </div>
+                `;
+                doctorList.innerHTML += doctorCard;
+            });
+        }
+
+        // Function to show doctor profile
+        function showDoctorProfile(doctorId) {
+    const doctor = doctors[doctorId];
+    if (!doctor) return;
+
+    // First set the profile HTML
+    const profileHtml = `
+        <h1 class="page-title">${doctor.name}'s Profile</h1>
+        <div class="doctor-profile" style="display: block;">
+            <div class="profile-header">
+                <img src="${doctor.imageUrl}" alt="${doctor.name}" class="profile-image">
+                <div class="profile-info">
+                    <h2 class="doctor-name">${doctor.name}</h2>
+                    <p class="doctor-specialty">${doctor.specialty}, ${doctor.hospital}</p>
+                    <p class="doctor-specialty">${doctor.qualification}</p>
+                    
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-value">${doctor.experience}</div>
+                            <div class="stat-label">Years Experience</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${doctor.satisfaction}</div>
+                            <div class="stat-label">Patient Satisfaction</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${doctor.patientsTreated}</div>
+                            <div class="stat-label">Patients Treated</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-content">
+                <h3 class="section-title">About</h3>
+                <p>${doctor.about}</p>
+                
+                <h3 class="section-title">Specializations</h3>
+                <ul class="specializations-list">
+                    ${doctor.specializations.map(spec => `<li>${spec}</li>`).join('')}
+                </ul>
+                
+                <div class="booking-section" style="margin-top: 2rem;">
+                    <h3 class="section-title">Book Appointment</h3>
+                    <form id="booking-form" class="booking-form">
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="appointment-date" style="display: block; margin-bottom: 0.5rem;">Select Date:</label>
+                            <input type="date" id="appointment-date" required style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="appointment-time" style="display: block; margin-bottom: 0.5rem;">Select Time:</label>
+                            <select id="appointment-time" required style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="">Select a time slot</option>
+                                <option value="09:00">09:00 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="14:00">02:00 PM</option>
+                                <option value="15:00">03:00 PM</option>
+                                <option value="16:00">04:00 PM</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="appointment-type" style="display: block; margin-bottom: 0.5rem;">Appointment Type:</label>
+                            <select id="appointment-type" required style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="">Select type</option>
+                                <option value="consultation">Consultation</option>
+                                <option value="follow-up">Follow-up</option>
+                                <option value="routine-checkup">Routine Checkup</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="book-button" style="width: 100%;">Confirm Appointment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Then update the DOM and show the profile page
+    document.getElementById('doctorProfile').innerHTML = profileHtml;
+    showPage('profile');
+
+    // Add form submission handler
+    document.getElementById('booking-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const date = document.getElementById('appointment-date').value;
+        const time = document.getElementById('appointment-time').value;
+        const type = document.getElementById('appointment-type').value;
+        
+        alert(`Appointment booked successfully!\n\nDoctor: ${doctor.name}\nDate: ${date}\nTime: ${time}\nType: ${type}`);
+    });
+}
+
+// Also update the showPage function to properly handle the visibility
+function showPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page-content').forEach(page => {
+        page.classList.remove('active');
+    });
+    
+    // Show the selected page
+    const selectedPage = document.getElementById(`${pageId}-page`);
+    if (selectedPage) {
+        selectedPage.classList.add('active');
+        // Update URL
+        updateURL(pageId);
+    }
+}        // Initialize the page
+        createDoctorCards();
+
+        // Handle browser back button
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.page) {
+                showPage(event.state.page);
+            }
+        });
+
+        // Update URL without reload
+        function updateURL(page) {
+            history.pushState({ page: page }, '', `#${page}`);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Dashboard</title>
+    <link rel="stylesheet" href="./dashboard.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    
+</head>
+<body>
+    <nav class="navbar">
+        <a href = "index.html">
+        <div class="logo">VitaCore</div></a>
+        <div class="nav-links">
+            <a href="mental-health.html">Mental-Health</a>
+            <a href="patient-booking.html">patient-booking</a>
+            <a href="blogs.html">blogs</a>
+        </div>
+        <button class="book-btn">BOOK A DOCTOR</button>
+    </nav>
+
+    <!-- <div class="tabs">
+        <div class="tab active">Overview</div>
+        <div class="tab">Analytics</div>
+        <div class="tab">Patients</div>
+        <div class="tab">Lab</div>
+    </div> -->
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📅</div>
+            <div>
+                <h3>Appointments</h3>
+                <p>2 • Last week</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div>
+                <h3>Patient History</h3>
+                <p>4 diseases</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💊</div>
+            <div>
+                <h3>Current Medication</h3>
+                <p>12 • Last 2 years</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="patient-header">
+            <h1>Patient's Records</h1>
+            <p>Shreya Sharma, 19</p>
+        </div>
+
+        <div class="record-tabs">
+            <div class="record-tab active" data-organ="heart">Heart</div>
+            <div class="record-tab" data-organ="brain">Brain</div>
+            <div class="record-tab" data-organ="kidney">Kidney</div>
+            <div class="record-tab" data-organ="eyes">Eyes</div>
+        </div>
+
+        <!-- Heart Content -->
+        <div id="heart-content" class="organ-content active">
+            <div class="records-grid">
+                <div class="organ-visual">
+                    <div class="placeholder-img">❤️</div>
+                    <h3>Heart Scan</h3>
+                    <div class="scan-image"><img src = "./heart-ct.png"></div>
+                </div>
+                <div class="organ-stats">
+                    <div class="stat-box">
+                        <h3>Heart Rate</h3>
+                        <canvas id="heartRateChart"></canvas>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Blood Pressure</h3>
+                        <p>130/90 mm Hg</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Pulse</h3>
+                        <p>81 beats/min</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Foods to Avoid</h3>
+                        <div class="foods-grid">
+                            <div class="food-item">
+                                <div class="placeholder-img">🍔</div>
+                                <p>Burgers</p>
+                            </div>
+                            <div class="food-item">
+                                <div class="placeholder-img">🍟</div>
+                                <p>Fries</p>
+                            </div>
+                            <div class="food-item">
+                                <div class="placeholder-img">🍝</div>
+                                <p>Pasta</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Brain Content -->
+        <div id="brain-content" class="organ-content">
+            <div class="records-grid">
+                <div class="organ-visual">
+                    <div class="placeholder-img">🧠</div>
+                    <h3>Brain MRI</h3>
+                    <div class="scan-image">MRI Scan Image</div>
+                </div>
+                <div class="organ-stats">
+                    <div class="stat-box">
+                        <h3>Neural Activity</h3>
+                        <canvas id="brainActivityChart"></canvas>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Cognitive Tests</h3>
+                        <p>Memory: 95%</p>
+                        <p>Attention: 88%</p>
+                        <p>Processing Speed: 92%</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Sleep Quality</h3>
+                        <p>Average: 7.2 hours</p>
+                        <p>Deep Sleep: 32%</p>
+                    </div>
+                    <div class="warning-box">
+                        <h4>⚠️ Recommendations</h4>
+                        <p>Maintain regular sleep schedule</p>
+                        <p>Practice stress management</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kidney Content -->
+        <div id="kidney-content" class="organ-content">
+            <div class="records-grid">
+                <div class="organ-visual">
+                    <div class="placeholder-img">🫘</div>
+                    <h3>Kidney Ultrasound</h3>
+                    <div class="scan-image">Ultrasound Image</div>
+                </div>
+                <div class="organ-stats">
+                    <div class="stat-box">
+                        <h3>Kidney Function</h3>
+                        <canvas id="kidneyFunctionChart"></canvas>
+                    </div>
+                    <div class="metrics-grid">
+                        <div class="stat-box">
+                            <h3>Creatinine</h3>
+                            <p>0.9 mg/dL</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>GFR</h3>
+                            <p>95 mL/min</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>BUN</h3>
+                            <p>15 mg/dL</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>Uric Acid</h3>
+                            <p>5.2 mg/dL</p>
+                        </div>
+                    </div>
+                    <div class="warning-box">
+                        <h4>💧 Hydration Status</h4>
+                        <p>Current: Adequate</p>
+                        <p>Recommendation: 2.5L daily</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Eyes Content -->
+        <div id="eyes-content" class="organ-content">
+            <div class="records-grid">
+                <div class="organ-visual">
+                    <div class="placeholder-img">👁️</div>
+                    <h3>Eye Examination</h3>
+                    <div class="scan-image">Retinal Scan</div>
+                </div>
+                <div class="organ-stats">
+                    <div class="metrics-grid">
+                        <div class="stat-box">
+                            <h3>Vision (Left)</h3>
+                            <p>-1.25</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>Vision (Right)</h3>
+                            <p>-1.50</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>Eye Pressure</h3>
+                            <p>14 mmHg</p>
+                        </div>
+                        <div class="stat-box">
+                            <h3>Color Vision</h3>
+                            <p>Normal</p>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Screen Time</h3>
+                        <canvas id="screenTimeChart"></canvas>
+                    </div>
+                    <div class="warning-box">
+                        <h4>👀 Eye Care Tips</h4>
+                        <p>Follow 20-20-20 rule</p>
+                        <p>Use blue light filter</p>
+                        <p>Next check-up: 3 months</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

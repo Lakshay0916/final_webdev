@@ -1,0 +1,130 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  h2 {
+    margin-top: 20px;
+    color: #555;
+  }
+  
+  .doctor-section,
+  .date-section,
+  .slot-section,
+  .appointment-type-section,
+  .service-section,
+  .description-section {
+    margin-top: 20px;
+  }
+  
+  .doctors {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .doctor {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: transform 0.2s;
+  }
+  
+  .doctor img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 8px;
+  }
+  
+  .doctor:hover {
+    transform: scale(1.05);
+    border-color: #4CAF50;
+  }
+  
+  .slot-section .slots {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .slot {
+    width: 80px;
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+  }
+  
+  .available {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .unavailable {
+    background-color: #FF6347;
+    color: white;
+    cursor: not-allowed;
+  }
+  
+  .book-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 20px;
+  }
+  
+  .book-button:hover {
+    background-color: #45a049;
+  }
+  
+  #appointment-date, 
+  #appointment-type, 
+  #service {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  

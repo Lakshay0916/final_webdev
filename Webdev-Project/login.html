@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaCore - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 4rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            color: #2D8B7F;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #2D8B7F;
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #000000;
+            font-size: 1rem;
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 4rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        .illustration {
+            flex: 1;
+            max-width: 600px;
+            background-color: #f0f7f6;
+            padding: 2rem;
+            border-radius: 1rem;
+        }
+
+        .login-section {
+            flex: 1;
+            max-width: 400px;
+            padding: 2rem;
+        }
+
+        .login-section h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            background-color: #f8fafc;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2D8B7F;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .help-text {
+            text-align: right;
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #e2e8f0;
+            margin: 0 1rem;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-button {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: white;
+        }
+
+        .register-link {
+            text-align: center;
+            color: #2D8B7F;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <div class="logo-icon"></div>
+            VitaCore
+        </a>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Services</a>
+            <a href="#">About Us</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="illustration">
+            <img src="doc1.png" alt="Medical care illustration">
+        </div>
+        
+        <div class="login-section">
+            <h1>Login</h1>
+            <form action="dashboard.html" method="GET">
+                <input type="email" placeholder="Enter Email" class="input-field" required>
+                <input type="password" placeholder="••••••••" class="input-field" required>
+                <button type="submit" class="login-button">Login</button>
+            </form>
+            
+            
+            <div class="help-text">Having Problem?</div>
+            
+            <div class="divider">Or continue with</div>
+            
+            <div class="social-login">
+                <button class="social-button">G</button>
+                <button class="social-button">A</button>
+                <button class="social-button">f</button>
+            </div>
+            
+            <a href="#" class="register-link">New User? Register Now</a>
+        </div>
+    </main>
+</body>
+</html>

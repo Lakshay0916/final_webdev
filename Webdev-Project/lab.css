@@ -1,0 +1,104 @@
+/* General Styling */
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+  
+  h1, h2, h5 {
+    color: #389595;
+    font-weight: 500;
+  }
+  
+  p {
+    color: #666;
+  }
+  
+  /* Header */
+  header {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 30px 0;
+  }
+  
+  .logo img {
+    width: 150px;
+  }
+  
+  .nav-link {
+    color: #333;
+    margin-right: 20px;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-link.active {
+    font-weight: bold;
+    color: #389595;
+  }
+  
+  .nav-link:hover {
+    color: #421a81;
+  }
+  
+  .user-profile .btn-outline-primary {
+    border-color: #389595;
+    color: #389595;
+    transition: background-color 0.3s ease;
+  }
+  
+  .user-profile .btn-outline-primary:hover {
+    background-color: #389595;
+    color: #fff;
+  }
+  
+  /* Card Styling */
+  .card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card h5 {
+    color: #333;
+    font-weight: 500;
+  }
+  
+  .card p {
+    color: #666;
+  }
+  
+  /* Footer */
+  footer {
+    padding: 30px 0;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    font-size: 0.9em;
+  }
+  
+  footer p {
+    margin: 0;
+  }
+  
+  /* Media Queries for Mobile Responsiveness */
+  @media (max-width: 768px) {
+    .card {
+      margin-bottom: 20px;
+    }
+  
+    .btn-outline-primary {
+      width: 100%;
+    }
+  } 
