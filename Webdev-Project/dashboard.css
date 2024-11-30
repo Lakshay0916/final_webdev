@@ -5,6 +5,10 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
+*{
+    text-decoration: none;
+}
+
 :root {
     --primary: #45B1A8;
     --light-bg: #F5F7FA;

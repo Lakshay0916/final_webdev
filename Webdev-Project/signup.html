@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaCore - Sign Up</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 4rem;
+            background-color: #2D8B7F;
+            color: white;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            margin-left: 2rem;
+            font-size: 1rem;
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 4rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        .illustration {
+            flex: 1;
+            max-width: 600px;
+            background-color: #f0f7f6;
+            padding: 2rem;
+            border-radius: 1rem;
+        }
+
+        .sign-up-section {
+            flex: 1;
+            max-width: 400px;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .sign-up-section h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #2D8B7F;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            background-color: #f8fafc;
+        }
+
+        .sign-up-button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2D8B7F;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .help-text {
+            text-align: right;
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .register-link {
+            text-align: center;
+            display: block;
+            margin-top: 1rem;
+            color: #2D8B7F;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <div class="logo-icon"></div>
+            VitaCore
+        </a>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Services</a>
+            <a href="#">About Us</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="illustration">
+            <img src="Assets/healthcare.png" alt="Medical Sign Up Illustration" style="width: 100%; border-radius: 1rem;">
+        </div>
+        
+        <div class="sign-up-section">
+            <h1>Sign Up</h1>
+            <form id="signup-form" action="/signup" method="post" >
+                <input type="text" name="fullname" placeholder="Full Name" class="input-field" required>
+                <input type="email" name="email" placeholder="Email Address" class="input-field" required>
+                <input type="password" name="password" placeholder="Create Password" class="input-field" required>
+                <input type="password" name="confirmPassword" placeholder="Confirm Password" class="input-field" required>
+                <button type="submit" class="sign-up-button">Create Account</button>
+            </form>
+            
+            
+            <div class="help-text">Need help?</div>
+            
+            <a href="login.html" class="register-link">Already have an account? Login</a>
+        </div>
+    </main>
+<script >
+    const form = document.getElementById("signup-form");
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = {
+        fullname: form.fullname.value,
+        email: form.email.value,
+        password: form.password.value,
+        confirmPassword: form.confirmPassword.value,
+    };
+
+    try {
+        const response = await fetch("http://localhost:4000/signup.html", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert(result.message);
+            window.location.href = "dashboard.html";
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        console.error(error);
+        alert("An error occurred. Please try again.");
+    }
+   });
+
+</script>    
+</body>
+
+</html>

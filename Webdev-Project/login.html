@@ -167,11 +167,13 @@
         
         <div class="login-section">
             <h1>Login</h1>
-            <form action="dashboard.html" method="GET">
-                <input type="email" placeholder="Enter Email" class="input-field" required>
-                <input type="password" placeholder="••••••••" class="input-field" required>
+            <form id="loginForm">
+                <input type="email" name="email" placeholder="Enter Email" class="input-field" required>
+                <input type="password" name="password" placeholder="••••••••" class="input-field" required>
                 <button type="submit" class="login-button">Login</button>
             </form>
+            
+            <script src="login.js"></script>
             
             
             <div class="help-text">Having Problem?</div>
@@ -184,7 +186,7 @@
                 <button class="social-button">f</button>
             </div>
             
-            <a href="#" class="register-link">New User? Register Now</a>
+            <a href="signup.html" class="register-link">New User? Register Now</a>
         </div>
     </main>
 </body>
