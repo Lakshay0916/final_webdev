@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007BFF;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        label, input, button {
+            font-size: 16px;
+        }
+
+        input, button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .patient-info {
+            margin-top: 20px;
+        }
+
+        .patient-info img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        .error {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Search Patient Details</h1>
+    <form id="patientSearchForm">
+        <label for="patientName">Enter Patient Name:</label>
+        <input type="text" id="patientName" name="patientName" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="patient-info" id="patientInfo"></div>
+</div>
+
+<script>
+    document.getElementById('patientSearchForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const patientName = document.getElementById('patientName').value;
+
+        try {
+            const response = await fetch(`http://localhost:4000/patient?name=${encodeURIComponent(patientName)}`);
+            const result = await response.json();
+
+            if (response.ok) {
+                displayPatientInfo(result);
+            } else {
+                document.getElementById('patientInfo').innerHTML = `<p class="error">${result.message || 'Patient not found'}</p>`;
+            }
+        } catch (error) {
+            console.error('Error fetching patient details:', error);
+            document.getElementById('patientInfo').innerHTML = `<p class="error">Error connecting to the server.</p>`;
+        }
+    });
+
+    function displayPatientInfo(patient) {
+        const patientInfoDiv = document.getElementById('patientInfo');
+        patientInfoDiv.innerHTML = `
+            <h2>Patient Details</h2>
+            <p><strong>Name:</strong> ${patient.patientName}</p>
+            <p><strong>Age:</strong> ${patient.patientAge}</p>
+            <p><strong>Gender:</strong> ${patient.patientGender}</p>
+            <p><strong>Contact Number:</strong> ${patient.contactNumber}</p>
+            <p><strong>Heart Rate:</strong> ${patient.heartRate} bpm</p>
+            <p><strong>Blood Pressure:</strong> ${patient.bloodPressure}</p>
+            <p><strong>Medical History:</strong> ${patient.medicalHistory || 'N/A'}</p>
+            <p><strong>Current Medications:</strong> ${patient.currentMedications || 'N/A'}</p>
+            ${patient.mriScan ? `<p><strong>MRI Scan:</strong></p><img src="./connection/${patient.mriScan}" alt="MRI Scan">` : ''}
+            ${patient.xrayScan ? `<p><strong>X-Ray Scan:</strong></p><img src="./connection/${patient.xrayScan}" alt="X-Ray Scan">` : ''}
+        `;
+    }
+</script>
+
+</body>
+</html>

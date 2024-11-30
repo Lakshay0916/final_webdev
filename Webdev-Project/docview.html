@@ -1,519 +1,232 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Medical Dashboard</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>Patient Data Entry Form</title>
+    <style>
+        .toast-success {
+    background-color: #28a745;
+}
+.toast-error {
+    background-color: #dc3545;
+}
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007BFF;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        header p {
+            margin: 5px 0 0;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea, button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeInOut 3s ease forwards;
+        }
+
+        @keyframes fadeInOut {
+            0%, 90% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Toast Notifications -->
-    <div id="toastContainer" class="fixed top-4 right-4 z-50"></div>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <img src="Assets/logo.png" alt="VitaCore">
+        </div>
 
-    <div class="min-h-screen p-6">
-        <!-- Header -->
-        <header class="mb-8">
-            <div class="max-w-7xl mx-auto">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h1 class="text-3xl font-bold text-gray-900">Patient Medical Records</h1>
-                        <p class="text-gray-600" id="lastUpdated">Last updated: Loading...</p>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <button onclick="saveAllChanges()" id="saveButton" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                            Save Changes
-                        </button>
-                        <button onclick="exportData()" class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50">
-                            Export Report
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </header>
+        <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
 
-        <!-- Main Content -->
-        <main class="max-w-7xl mx-auto">
-            <div id="systemTabs" class="mb-6 flex space-x-4 border-b"></div>
-            <div id="contentSections"></div>
-        </main>
-    </div>
+        <div class="navbar-links" id="navbar-links">
+            <a href="/index.html" class="active">Home</a>
+            <a href="/about.html">About</a>
+            <a href="/register.html">Fast-Appointment</a>
+            <a href="#services">Services</a>
+            <a href="/contact.html" class="navbar-contact">Contact US</a>
+        </div>
+    </nav>
 
-    <script>
-        // Global state with localStorage backup
-        let organData = null;
-        let currentSystem = 'heart';
-        let hasUnsavedChanges = false;
+<header>
+    <h1>Patient Medical Records</h1>
+    <p>Enter new patient details below</p>
+</header>
 
-        // Toast notification function
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `mb-4 p-4 rounded-lg text-white ${
-                type === 'success' ? 'bg-green-500' : 'bg-red-500'
-            }`;
-            toast.textContent = message;
-            
-            const container = document.getElementById('toastContainer');
-            container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
 
-        // Load data with localStorage fallback
-        async function loadOrganData() {
-            try {
-                // Try to load from localStorage first
-                const cachedData = localStorage.getItem('organData');
-                if (cachedData) {
-                    organData = JSON.parse(cachedData);
-                    showToast('Loaded data from cache');
-                } else {
-                    // Simulate API call to load initial data
-                    const response = await fetch('/organ-data.json');
-                    if (!response.ok) throw new Error('Failed to fetch data');
-                    organData = await response.json();
-                    
-                    // Cache the data
-                    localStorage.setItem('organData', JSON.stringify(organData));
-                    showToast('Loaded fresh data');
-                }
-                
-                initializeDashboard();
-                updateLastUpdated();
-            } catch (error) {
-                console.error('Error loading data:', error);
-                showToast('Error loading data. Using fallback data.', 'error');
-                
-                // Use fallback data if everything fails
-                organData = getFallbackData();
-                initializeDashboard();
-            }
-        }
+<div class="container">
+    <form id="patientForm">
+        <div>
+            <label for="patientName">Patient Name</label>
+            <input type="text" id="patientName" name="patientName" required>
+        </div>
 
-        // Get fallback data
-        function getFallbackData() {
-            return {
-                heart: {
-                    icon: "❤️",
-                    scanType: "Heart Scan",
-                    metrics: {
-                        heartRate: {
-                            title: "Heart Rate",
-                            value: "75 BPM"
-                        }
-                    }
-                }
-            };
-        }
+        <div>
+            <label for="patientAge">Age</label>
+            <input type="number" id="patientAge" name="patientAge" required min="0">
+        </div>
 
-        // Save changes with proper error handling
-        async function saveAllChanges() {
-            const saveButton = document.getElementById('saveButton');
-            saveButton.disabled = true;
-            saveButton.textContent = 'Saving...';
+        <div>
+            <label for="patientGender">Gender</label>
+            <select id="patientGender" name="patientGender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div>
+            <label for="heartRate">Heart Rate (bpm)</label>
+            <input type="number" id="heartRate" name="heartRate" required min="40">
+        </div>
+        
+        <div>
+            <label for="bloodPressure">Blood Pressure (mmHg)</label>
+            <input type="text" id="bloodPressure" name="bloodPressure" required pattern="\d{2,3}/\d{2,3}">
+        </div>
+        
 
-            try {
-                // Simulate API call with artificial delay
-                await new Promise(resolve => setTimeout(resolve, 1000));
+        <div>
+            <label for="contactNumber">Contact Number</label>
+            <input type="tel" id="contactNumber" name="contactNumber" required pattern="[0-9]{10}">
+        </div>
 
-                // Save to localStorage as backup
-                localStorage.setItem('organData', JSON.stringify(organData));
-                
-                // In a real application, you would make an API call here
-                // const response = await fetch('/api/save-organ-data', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify(organData)
-                // });
-                // if (!response.ok) throw new Error('Failed to save');
+        <div>
+            <label for="medicalHistory">Medical History</label>
+            <textarea id="medicalHistory" name="medicalHistory" rows="4"></textarea>
+        </div>
 
-                hasUnsavedChanges = false;
-                updateLastUpdated();
-                showToast('Changes saved successfully');
-            } catch (error) {
-                console.error('Save error:', error);
-                showToast('Error saving changes. Data backed up locally.', 'error');
-            } finally {
-                saveButton.disabled = false;
-                saveButton.textContent = 'Save Changes';
-            }
-        }
+        <div>
+            <label for="currentMedications">Current Medications</label>
+            <textarea id="currentMedications" name="currentMedications" rows="4"></textarea>
+        </div>
+        <div>
+            <label for="mriScan">MRI Scan (optional)</label>
+            <input type="file" id="mriScan" name="mriScan" accept="image/*">
+        </div>
+        
+        <div>
+            <label for="xrayScan">X-Ray Scan (optional)</label>
+            <input  type="file" id="xrayScan" name="xrayScan" accept="image/*">
+        </div>
+        
 
-        // Update metric with validation
-        function updateMetricValue(system, metric, value) {
-            try {
-                const metricData = organData[system].metrics[metric];
-                
-                // Validate the new value
-                if (!validateMetricValue(value, metricData)) {
-                    throw new Error('Invalid value for this metric');
-                }
-                
-                if (metricData.chartData) {
-                    metricData.chartData.data[metricData.chartData.data.length - 1] = parseFloat(value);
-                } else {
-                    metricData.value = value;
-                }
-                
-                hasUnsavedChanges = true;
-                showSystemContent(system);
-                showToast('Metric updated. Remember to save changes.');
-                
-                // Auto-save to localStorage
-                localStorage.setItem('organData', JSON.stringify(organData));
-            } catch (error) {
-                console.error('Update error:', error);
-                showToast(error.message, 'error');
-            }
-        }
+        <div class="text-right">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+<script>
+    function showToast(message, success = true) {
+        const toast = document.createElement('div');
+        toast.className = `toast ${success ? 'toast-success' : 'toast-error'}`;
+        toast.innerText = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
 
-        // Validate metric values
-        function validateMetricValue(value, metricData) {
-            if (value === null || value === '') return false;
-            
-            if (metricData.chartData) {
-                const num = parseFloat(value);
-                return !isNaN(num) && 
-                       num >= metricData.chartData.yAxisMin && 
-                       num <= metricData.chartData.yAxisMax;
-            }
-            
-            return true;
-        }
+    document.getElementById('patientForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
 
-        // Export with error handling
-        function exportData() {
-            try {
-                const dataStr = JSON.stringify(organData, null, 2);
-                const dataBlob = new Blob([dataStr], { type: 'application/json' });
-                const url = URL.createObjectURL(dataBlob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `organ-data-${new Date().toISOString().split('T')[0]}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                showToast('Data exported successfully');
-            } catch (error) {
-                console.error('Export error:', error);
-                showToast('Error exporting data', 'error');
-            }
-        }
-
-        // Edit metric with improved UI
-        function editMetric(system, metric) {
-            const metricData = organData[system].metrics[metric];
-            const currentValue = metricData.value || 
-                (metricData.chartData?.data[metricData.chartData.data.length - 1]);
-            
-            // Create modal for editing
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center';
-            modal.innerHTML = `
-                <div class="bg-white p-6 rounded-lg max-w-md w-full">
-                    <h3 class="text-lg font-semibold mb-4">Edit ${metricData.title}</h3>
-                    <input type="text" value="${currentValue}" 
-                           class="w-full p-2 border rounded mb-4" 
-                           id="metricInput">
-                    <div class="flex justify-end space-x-2">
-                        <button onclick="this.parentElement.parentElement.parentElement.remove()" 
-                                class="px-4 py-2 border rounded">
-                            Cancel
-                        </button>
-                        <button onclick="handleMetricUpdate('${system}', '${metric}')" 
-                                class="px-4 py-2 bg-blue-500 text-white rounded">
-                            Save
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-        }
-
-        function handleMetricUpdate(system, metric) {
-            const input = document.getElementById('metricInput');
-            const value = input.value;
-            
-            if (updateMetricValue(system, metric, value)) {
-                input.parentElement.parentElement.remove();
-            }
-        }
-
-        // Rest of the dashboard initialization code remains the same
-        // ... (include all the other functions from the previous version)
-        function initializeDashboard() {
-            createSystemTabs();
-            showSystemContent(currentSystem);
-            setupEventListeners();
-        }
-
-        // Create system tabs
-        function createSystemTabs() {
-            const tabsContainer = document.getElementById('systemTabs');
-            const systems = Object.keys(organData);
-            
-            systems.forEach(system => {
-                const button = document.createElement('button');
-                button.className = `px-4 py-2 ${system === currentSystem ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-gray-900'}`;
-                button.innerHTML = `${organData[system].icon} ${system.charAt(0).toUpperCase() + system.slice(1)}`;
-                button.onclick = () => switchSystem(system);
-                tabsContainer.appendChild(button);
-            });
-        }
-
-        // Switch between systems
-        function switchSystem(system) {
-            currentSystem = system;
-            updateTabStyles();
-            showSystemContent(system);
-        }
-
-        // Update tab styles
-        function updateTabStyles() {
-            const tabs = document.getElementById('systemTabs').children;
-            Array.from(tabs).forEach(tab => {
-                tab.className = 'px-4 py-2 text-gray-600 hover:text-gray-900';
-                if (tab.textContent.toLowerCase().includes(currentSystem)) {
-                    tab.className = 'px-4 py-2 text-blue-600 border-b-2 border-blue-600';
-                }
-            });
-        }
-
-        // Show system content
-        function showSystemContent(system) {
-            const contentSection = document.getElementById('contentSections');
-            const systemData = organData[system];
-            
-            let metricsHTML = '';
-            
-            // Generate metrics cards based on system data
-            Object.entries(systemData.metrics).forEach(([key, value]) => {
-                if (value.chartData) {
-                    metricsHTML += createChartCard(key, value);
-                } else if (Array.isArray(value)) {
-                    metricsHTML += createListCard(key, value);
-                } else {
-                    metricsHTML += createSimpleMetricCard(key, value);
-                }
+        try {
+            const response = await fetch('http://localhost:4000/addPatient', {
+                method: 'POST',
+                body: formData, // Correct way to send FormData for file uploads
             });
 
-            contentSection.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    ${metricsHTML}
-                    ${createScanCard(systemData)}
-                </div>
-            `;
+            const result = await response.json();
 
-            // Initialize charts
-            initializeCharts(system);
-        }
-
-        // Create chart card HTML
-        function createChartCard(key, data) {
-            return `
-                <div class="bg-white p-6 rounded-xl shadow-sm metric-card">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-900">${data.title}</h3>
-                        <button onclick="editMetric('${currentSystem}', '${key}')" class="text-blue-500 hover:text-blue-600">Edit</button>
-                    </div>
-                    <div class="h-48">
-                        <canvas id="chart_${key}"></canvas>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Create simple metric card HTML
-        function createSimpleMetricCard(key, data) {
-            return `
-                <div class="bg-white p-6 rounded-xl shadow-sm metric-card">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-900">${data.title}</h3>
-                        <button onclick="editMetric('${currentSystem}', '${key}')" class="text-blue-500 hover:text-blue-600">Edit</button>
-                    </div>
-                    <div class="text-2xl font-bold" id="${key}_value">
-                        ${data.value}
-                    </div>
-                </div>
-            `;
-        }
-
-        // Create scan card HTML
-        function createScanCard(data) {
-            return `
-                <div class="bg-white p-6 rounded-xl shadow-sm metric-card col-span-full">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-900">${data.scanType}</h3>
-                        <div class="flex space-x-2">
-                            <button onclick="uploadScan('${currentSystem}')" class="text-blue-500 hover:text-blue-600">Upload New</button>
-                            <button onclick="viewScanHistory('${currentSystem}')" class="text-blue-500 hover:text-blue-600">View History</button>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 p-4 rounded-lg text-center">
-                        <img src="/api/placeholder/800/400" alt="${data.scanLabel}" class="mx-auto rounded-lg"/>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Initialize charts
-        function initializeCharts(system) {
-            const systemData = organData[system];
-            
-            Object.entries(systemData.metrics).forEach(([key, value]) => {
-                if (value.chartData) {
-                    const ctx = document.getElementById(`chart_${key}`)?.getContext('2d');
-                    if (ctx) {
-                        new Chart(ctx, {
-                            type: value.chartData.type,
-                            data: {
-                                labels: value.chartData.labels,
-                                datasets: [{
-                                    label: value.chartData.label,
-                                    data: value.chartData.data,
-                                    borderColor: 'rgb(59, 130, 246)',
-                                    backgroundColor: 'rgba(59, 130, 246, 0.5)',
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                scales: {
-                                    y: {
-                                        min: value.chartData.yAxisMin,
-                                        max: value.chartData.yAxisMax
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }
-            });
-        }
-
-        // Edit metric
-        function editMetric(system, metric) {
-            const metricData = organData[system].metrics[metric];
-            const newValue = prompt(`Enter new value for ${metricData.title}:`, 
-                metricData.value || (metricData.chartData?.data[metricData.chartData.data.length - 1]));
-            
-            if (newValue !== null) {
-                updateMetricValue(system, metric, newValue);
-            }
-        }
-
-        // Update metric value
-        function updateMetricValue(system, metric, value) {
-            const metricData = organData[system].metrics[metric];
-            
-            if (metricData.chartData) {
-                metricData.chartData.data[metricData.chartData.data.length - 1] = parseFloat(value);
+            if (response.ok) {
+                showToast('Patient details submitted successfully.');
             } else {
-                metricData.value = value;
+                showToast(result.message || 'Failed to submit patient details.', false);
             }
-            
-            hasUnsavedChanges = true;
-            showSystemContent(system);
-            showSaveIndicator();
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Error connecting to the server.', false);
         }
-
-        // Save all changes
-        async function saveAllChanges() {
-            try {
-                // In a real application, this would be an API call
-                const response = await fetch('/organ-data.json', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(organData)
-                });
-
-                if (response.ok) {
-                    hasUnsavedChanges = false;
-                    showSaveSuccess();
-                    updateLastUpdated();
-                } else {
-                    throw new Error('Failed to save changes');
-                }
-            } catch (error) {
-                console.error('Error saving data:', error);
-                alert('Error saving changes. Please try again.');
-            }
-        }
-
-        // Export data
-        function exportData() {
-            const dataStr = JSON.stringify(organData, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'organ-data.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        // Show save success indicator
-        function showSaveSuccess() {
-            const indicator = document.getElementById('saveIndicator');
-            indicator.style.display = 'block';
-            setTimeout(() => {
-                indicator.style.display = 'none';
-            }, 3000);
-        }
-
-        // Update last updated timestamp
-        function updateLastUpdated() {
-            const timestamp = new Date().toLocaleString();
-            document.getElementById('lastUpdated').textContent = `Last updated: ${timestamp}`;
-        }
-
-        // Upload scan
-        function uploadScan(system) {
-            // Simulate file upload
-            alert('Scan upload functionality would be implemented here');
-        }
-
-        // View scan history
-        function viewScanHistory(system) {
-            // Simulate history view
-            alert('Scan history functionality would be implemented here');
-        }
-
-        // Setup event listeners
-        function setupEventListeners() {
-            // Warn about unsaved changes when leaving the page
-            window.addEventListener('beforeunload', (e) => {
-                if (hasUnsavedChanges) {
-                    e.preventDefault();
-                    e.returnValue = '';
-                }
-            });
-        }
+    });
+</script>
 
 
-        // Initialize
-        loadOrganData();
 
-        // Add auto-save functionality
-        window.addEventListener('beforeunload', (e) => {
-            if (hasUnsavedChanges) {
-                localStorage.setItem('organData', JSON.stringify(organData));
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        });
-    </script>
 </body>
 </html>
