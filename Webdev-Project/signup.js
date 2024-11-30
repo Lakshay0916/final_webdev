@@ -30,4 +30,4 @@ const form = document.getElementById("signup-form");
             console.error(error);
             alert("An error occurred. Please try again.");
         }
-    });
+  });
