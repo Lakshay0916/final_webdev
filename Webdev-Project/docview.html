@@ -137,6 +137,10 @@
             <label for="patientName">Patient Name</label>
             <input type="text" id="patientName" name="patientName" required>
         </div>
+        <div>
+            <label for="email">Patient Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
 
         <div>
             <label for="patientAge">Age</label>
@@ -209,13 +213,14 @@
         try {
             const response = await fetch('http://localhost:4000/addPatient', {
                 method: 'POST',
-                body: formData, // Correct way to send FormData for file uploads
+                body: formData
             });
 
             const result = await response.json();
 
             if (response.ok) {
                 showToast('Patient details submitted successfully.');
+                e.target.reset(); // Reset the form after successful submission
             } else {
                 showToast(result.message || 'Failed to submit patient details.', false);
             }

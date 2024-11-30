@@ -3,224 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medical Dashboard</title>
-    <link rel="stylesheet" href="./dashboard.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-    
+    <title>Patient Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1A7CA1;
+            --secondary-color: #2DC5B5;
+            --background-color: #F4F7F6;
+            --text-color: #333;
+            --card-background: white;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand i {
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar a:hover {
+            color: var(--secondary-color);
+        }
+
+        .navbar a i {
+            margin-right: 8px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .patient-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .patient-card {
+            background-color: var(--card-background);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .patient-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .patient-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        .patient-card .patient-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .patient-card .patient-details p {
+            display: flex;
+            align-items: center;
+        }
+
+        .patient-card .patient-details i {
+            margin-right: 10px;
+            color: var(--primary-color);
+            width: 20px;
+            text-align: center;
+        }
+
+        .patient-card .medical-images {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .patient-card .medical-images div {
+            text-align: center;
+        }
+
+        .patient-card .medical-images img {
+            max-width: 150px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .no-data {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .patient-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar">
-        <a href = "index.html">
-        <div class="logo">VitaCore</div></a>
-        <div class="nav-links">
-            <a href="mental-health.html">Mental-Health</a>
-            <a href="patient-booking.html">patient-booking</a>
-            <a href="blogs.html">blogs</a>
-        </div>
-        <button class="book-btn">BOOK A DOCTOR</button>
-    </nav>
+    <div class="navbar">
+        <a href="/" class="navbar-brand">
+            <i class="fas fa-notes-medical"></i>
+            Patient Portal
+        </a>
+        <a href="#" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </a>
+    </div>
 
-    <!-- <div class="tabs">
-        <div class="tab active">Overview</div>
-        <div class="tab">Analytics</div>
-        <div class="tab">Patients</div>
-        <div class="tab">Lab</div>
-    </div> -->
-
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-icon">📅</div>
-            <div>
-                <h3>Appointments</h3>
-                <p>2 • Last week</p>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon">📋</div>
-            <div>
-                <h3>Patient History</h3>
-                <p>4 diseases</p>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon">💊</div>
-            <div>
-                <h3>Current Medication</h3>
-                <p>12 • Last 2 years</p>
-            </div>
+    <div class="container">
+        <div id="patient-list" class="patient-list">
+            <!-- Patient data will be populated here -->
         </div>
     </div>
 
-    <div class="main-content">
-        <div class="patient-header">
-            <h1>Patient's Records</h1>
-            <p>Shreya Sharma, 19</p>
-        </div>
+    <script>
+        // Function to logout
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('email');
+            window.location.href = '/';
+        }
 
-        <div class="record-tabs">
-            <div class="record-tab active" data-organ="heart">Heart</div>
-            <div class="record-tab" data-organ="brain">Brain</div>
-            <div class="record-tab" data-organ="kidney">Kidney</div>
-            <div class="record-tab" data-organ="eyes">Eyes</div>
-        </div>
+        // Fetch patients data by email
+        async function fetchPatientByEmail() {
+            const email = localStorage.getItem('email'); // Retrieve email from localStorage
 
-        <!-- Heart Content -->
-        <div id="heart-content" class="organ-content active">
-            <div class="records-grid">
-                <div class="organ-visual">
-                    <div class="placeholder-img">❤️</div>
-                    <h3>Heart Scan</h3>
-                    <div class="scan-image"><img src = "./heart-ct.png"></div>
-                </div>
-                <div class="organ-stats">
-                    <div class="stat-box">
-                        <h3>Heart Rate</h3>
-                        <canvas id="heartRateChart"></canvas>
-                    </div>
-                    <div class="stat-box">
-                        <h3>Blood Pressure</h3>
-                        <p>130/90 mm Hg</p>
-                    </div>
-                    <div class="stat-box">
-                        <h3>Pulse</h3>
-                        <p>81 beats/min</p>
-                    </div>
-                    <div class="stat-box">
-                        <h3>Foods to Avoid</h3>
-                        <div class="foods-grid">
-                            <div class="food-item">
-                                <div class="placeholder-img">🍔</div>
-                                <p>Burgers</p>
-                            </div>
-                            <div class="food-item">
-                                <div class="placeholder-img">🍟</div>
-                                <p>Fries</p>
-                            </div>
-                            <div class="food-item">
-                                <div class="placeholder-img">🍝</div>
-                                <p>Pasta</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            if (!email) {
+                alert('You must be logged in to access this page.');
+                window.location.href = '/login.html';
+                return;
+            }
 
-        <!-- Brain Content -->
-        <div id="brain-content" class="organ-content">
-            <div class="records-grid">
-                <div class="organ-visual">
-                    <div class="placeholder-img">🧠</div>
-                    <h3>Brain MRI</h3>
-                    <div class="scan-image">MRI Scan Image</div>
-                </div>
-                <div class="organ-stats">
-                    <div class="stat-box">
-                        <h3>Neural Activity</h3>
-                        <canvas id="brainActivityChart"></canvas>
-                    </div>
-                    <div class="stat-box">
-                        <h3>Cognitive Tests</h3>
-                        <p>Memory: 95%</p>
-                        <p>Attention: 88%</p>
-                        <p>Processing Speed: 92%</p>
-                    </div>
-                    <div class="stat-box">
-                        <h3>Sleep Quality</h3>
-                        <p>Average: 7.2 hours</p>
-                        <p>Deep Sleep: 32%</p>
-                    </div>
-                    <div class="warning-box">
-                        <h4>⚠️ Recommendations</h4>
-                        <p>Maintain regular sleep schedule</p>
-                        <p>Practice stress management</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+            try {
+                const response = await fetch(`http://localhost:4000/patients/${email}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
 
-        <!-- Kidney Content -->
-        <div id="kidney-content" class="organ-content">
-            <div class="records-grid">
-                <div class="organ-visual">
-                    <div class="placeholder-img">🫘</div>
-                    <h3>Kidney Ultrasound</h3>
-                    <div class="scan-image">Ultrasound Image</div>
-                </div>
-                <div class="organ-stats">
-                    <div class="stat-box">
-                        <h3>Kidney Function</h3>
-                        <canvas id="kidneyFunctionChart"></canvas>
-                    </div>
-                    <div class="metrics-grid">
-                        <div class="stat-box">
-                            <h3>Creatinine</h3>
-                            <p>0.9 mg/dL</p>
-                        </div>
-                        <div class="stat-box">
-                            <h3>GFR</h3>
-                            <p>95 mL/min</p>
-                        </div>
-                        <div class="stat-box">
-                            <h3>BUN</h3>
-                            <p>15 mg/dL</p>
-                        </div>
-                        <div class="stat-box">
-                            <h3>Uric Acid</h3>
-                            <p>5.2 mg/dL</p>
-                        </div>
-                    </div>
-                    <div class="warning-box">
-                        <h4>💧 Hydration Status</h4>
-                        <p>Current: Adequate</p>
-                        <p>Recommendation: 2.5L daily</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+                const data = await response.json();
+                if (response.status === 200) {
+                    displayPatient(data); // Display specific patient data
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error('Error fetching patient data:', error);
+                alert('Failed to fetch patient data. Please try again.');
+            }
+        }
 
-        <!-- Eyes Content -->
-        <div id="eyes-content" class="organ-content">
-            <div class="records-grid">
-                <div class="organ-visual">
-                    <div class="placeholder-img">👁️</div>
-                    <h3>Eye Examination</h3>
-                    <div class="scan-image">Retinal Scan</div>
-                </div>
-                <div class="organ-stats">
-                    <div class="metrics-grid">
-                        <div class="stat-box">
-                            <h3>Vision (Left)</h3>
-                            <p>-1.25</p>
-                        </div>
-                        <div class="stat-box">
-                            <h3>Vision (Right)</h3>
-                            <p>-1.50</p>
-                        </div>
-                        <div class="stat-box">
-                            <h3>Eye Pressure</h3>
-                            <p>14 mmHg</p>
-                        </div>
-                        <div class="stat-box">
-                            <h3>Color Vision</h3>
-                            <p>Normal</p>
-                        </div>
-                    </div>
-                    <div class="stat-box">
-                        <h3>Screen Time</h3>
-                        <canvas id="screenTimeChart"></canvas>
-                    </div>
-                    <div class="warning-box">
-                        <h4>👀 Eye Care Tips</h4>
-                        <p>Follow 20-20-20 rule</p>
-                        <p>Use blue light filter</p>
-                        <p>Next check-up: 3 months</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        // Display patient data
+        function displayPatient(patients) {
+            const patientListContainer = document.getElementById('patient-list');
+            patientListContainer.innerHTML = '';
 
-    <script src="dashboard.js"></script>
+            if (!patients || patients.length === 0) {
+                patientListContainer.innerHTML = `
+                    <div class="no-data">
+                        <h3>No Patient Data Found</h3>
+                        <p>Please contact your healthcare provider for more information.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            patients.forEach(patient => {
+                const mriImg = patient.mriScan 
+                    ? `<img src="/connection/${patient.mriScan}" alt="MRI Scan">` 
+                    : '<p>MRI Scan Unavailable</p>';
+                
+                const xrayImg = patient.xrayScan 
+                    ? `<img src="/connection/${patient.xrayScan}" alt="X-Ray Scan">` 
+                    : '<p>X-Ray Scan Unavailable</p>';
+
+                const patientCard = document.createElement('div');
+                patientCard.classList.add('patient-card');
+                patientCard.innerHTML = `
+                    <h3>${patient.patientName}</h3>
+                    <div class="patient-details">
+                        <p><i class="fas fa-birthday-cake"></i> Age: ${patient.patientAge}</p>
+                        <p><i class="fas fa-venus-mars"></i> Gender: ${patient.patientGender}</p>
+                        <p><i class="fas fa-heartbeat"></i> Heart Rate: ${patient.heartRate}</p>
+                        <p><i class="fas fa-wave-square"></i> Blood Pressure: ${patient.bloodPressure}</p>
+                    </div>
+                    <div class="patient-details">
+                        <p><i class="fas fa-file-medical-alt"></i> Medical History: ${patient.medicalHistory || 'N/A'}</p>
+                        <p><i class="fas fa-prescription-bottle-alt"></i> Current Medications: ${patient.currentMedications || 'N/A'}</p>
+                    </div>
+                    <div class="medical-images">
+                        <div>
+                            <h4>MRI Scan</h4>
+                            ${mriImg}
+                        </div>
+                        <div>
+                            <h4>X-Ray Scan</h4>
+                            ${xrayImg}
+                        </div>
+                    </div>
+                `;
+                patientListContainer.appendChild(patientCard);
+            });
+        }
+
+        // Initialize the dashboard
+        fetchPatientByEmail();
+    </script>
 </body>
 </html>

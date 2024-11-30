@@ -1,3 +1,8 @@
+
+
+
+
+// Middleware
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -6,8 +11,10 @@ const path = require('path');
 const mongoose = require('mongoose');
 const multer = require('multer'); // For handling file uploads
 const fs = require('fs');
+const jwt = require('jsonwebtoken');
 
-// Import the database connection function
+
+// MongoDB connection
 let dbconnect = require('./connect.js');
 dbconnect(); // Initialize MongoDB connection
 
@@ -51,8 +58,9 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-// Define Patient Schema & Model with MRI and X-ray uploads
+// Define Patient Schema & Model with a reference to User
 const patientSchema = new mongoose.Schema({
+    email: { type: String, required: true },
     patientName: { type: String, required: true },
     patientAge: { type: Number, required: true },
     patientGender: { type: String, required: true },
@@ -62,10 +70,24 @@ const patientSchema = new mongoose.Schema({
     heartRate: { type: Number, required: true },
     bloodPressure: { type: String, required: true },
     mriScan: { type: String }, // File path for MRI scan
-    xrayScan: { type: String } // File path for X-ray scan
+    xrayScan: { type: String }, // File path for X-ray scan
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' } // Link to the user who owns the patient data
 });
 
 const Patient = mongoose.model('Patient', patientSchema);
+
+// Middleware to verify JWT token
+const verifyToken = (req, res, next) => {
+    const token = req.headers['authorization'];
+
+    if (!token) return res.status(403).json({ message: 'No token provided' });
+
+    jwt.verify(token, 'your_jwt_secret', (err, decoded) => {
+        if (err) return res.status(403).json({ message: 'Invalid token' });
+        req.userId = decoded.userId; // Attach userId to the request
+        next();
+    });
+};
 
 // Routes
 
@@ -95,6 +117,7 @@ app.post('/signup', async (req, res) => {
 });
 
 // User Login
+// User Login (without JWT, just check email and password)
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -109,18 +132,23 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
 
-        res.status(200).json({ message: 'Login successful', user: { email: user.email, fullname: user.fullname } });
+        res.status(200).json({ message: 'Login successful' });
     } catch (error) {
         console.error('Login Error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
 
+
 // Add Patient with file uploads
+// Add Patient with file uploads (no token required)
+// Add Patient with file uploads (no token required)
+// Add Patient with file uploads (No token required, just use email)
 app.post('/addPatient', upload.fields([{ name: 'mriScan' }, { name: 'xrayScan' }]), async (req, res) => {
     try {
         const patientData = {
             ...req.body,
+            email: req.body.email, // Use email from the request body
             mriScan: req.files.mriScan ? req.files.mriScan[0].path : null,
             xrayScan: req.files.xrayScan ? req.files.xrayScan[0].path : null,
         };
@@ -133,10 +161,11 @@ app.post('/addPatient', upload.fields([{ name: 'mriScan' }, { name: 'xrayScan' }
     }
 });
 
-// Fetch All Patients
-app.get('/patients', async (req, res) => {
+
+// Fetch Patients Data of Logged-In User
+app.get('/patients', verifyToken, async (req, res) => {
     try {
-        const patients = await Patient.find();
+        const patients = await Patient.find({ userId: req.userId });
         res.status(200).json(patients);
     } catch (error) {
         console.error('Fetch Patients Error:', error);
@@ -144,11 +173,14 @@ app.get('/patients', async (req, res) => {
     }
 });
 
-
-app.get('/patient', async (req, res) => {
+// Fetch Patient by Name (Specific to Logged-In User)
+app.get('/patient', verifyToken, async (req, res) => {
     const { name } = req.query;
     try {
-        const patient = await Patient.findOne({ patientName: new RegExp(`^${name}$`, 'i') }); // Case-insensitive match
+        const patient = await Patient.findOne({ 
+            patientName: new RegExp(name, 'i'),
+            userId: req.userId // Only fetch patients related to the logged-in user
+        });
         if (!patient) {
             return res.status(404).json({ message: 'Patient not found' });
         }
@@ -156,6 +188,24 @@ app.get('/patient', async (req, res) => {
     } catch (error) {
         console.error('Fetch Patient Error:', error);
         res.status(500).json({ message: 'Error fetching patient details' });
+    }
+});
+
+// Fetch Patient by Email (Specific to Logged-In User)
+// Fetch Patient Data based on the Email (No token required)
+app.get('/patients/:email', async (req, res) => {
+    const { email } = req.params;
+
+    try {
+        const patients = await Patient.find({ email: email });
+        if (!patients || patients.length === 0) {
+            return res.status(404).json({ message: 'No patients found for this email' });
+        }
+
+        res.status(200).json(patients);
+    } catch (error) {
+        console.error('Fetch Patient Data Error:', error);
+        res.status(500).json({ message: 'Error fetching patient data' });
     }
 });
 
