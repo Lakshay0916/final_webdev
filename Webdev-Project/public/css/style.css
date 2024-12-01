@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #389595;
+  background-color: white;
 }
 
 .main{
@@ -172,6 +172,7 @@ div .navbar-contact:hover {
   justify-content: center;
   align-items: center;
   gap: 10px;
+  width: 50px;
 }
 
 .Services {
@@ -181,6 +182,7 @@ div .navbar-contact:hover {
   font-size: 1.2em;
   display: flex;
   align-items: center;
+  width: 50px;
 }
 
 .Services-icon {
@@ -371,6 +373,7 @@ img {
   margin: 0 auto;
   padding: 0 20px;
   gap: 20px;
+  width: 1000px;
 }
 
 .card {
@@ -379,8 +382,9 @@ img {
   padding: 30px;
   background-color: white;
   text-align: center;
-  width: 45%;
+  width: 300px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+
 }
 
 .card:hover {
@@ -458,13 +462,14 @@ h2 {
   justify-content: space-around;
   /* flex-wrap: wrap; */
   gap: 20px;
+  width: 100px;
 }
 
 .card {
   background: white;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 30%;
+  width: 300px;
   padding: 20px;
   text-align: center;
   transition: transform 0.3s, box-shadow 0.3s;
@@ -564,7 +569,7 @@ h2 {
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #389595;
+  background-color: white;
 }
 
 .main{
@@ -942,7 +947,7 @@ img {
   padding: 30px;
   background-color: white;
   text-align: center;
-  width: 45%;
+  width: 300px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -1027,7 +1032,7 @@ h2 {
   background: white;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 30%;
+  width: 300px;
   padding: 20px;
   text-align: center;
   transition: transform 0.3s, box-shadow 0.3s;

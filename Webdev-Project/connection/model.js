@@ -22,13 +22,18 @@ const app = express();
 const PORT = 4000;
 
 // Static file handling
-app.use(express.static('D:/MyWeb/final_webdev/Webdev-Project'));
+
+app.use(express.static('C:/Users/krish/Documents/final_webdev/Webdev-Project'));
 
 
 
 
 app.set("views", path.join(__dirname, "../views"));
 app.use(express.static(path.join(__dirname, "../public")));
+
+app.get('/index', (req, res) => {
+    res.render('index', { title: 'Home Page' });
+});
 
 app.engine(
   "handlebars",

@@ -6,9 +6,9 @@ hamburger.addEventListener('click', () => {
 });
 
 const servicesData = [
-    { title: "Dashboard", description: "Manage your health information", icon: "Assets/service-appointment.svg" },
-    { title: "Doctor Profiles", description: "Find the right specialist for you", icon: "Assets/doctor.svg" },
-    { title: "Appointment", description: "Book appointments easily", icon: "Assets/service-appointment.svg" }
+    { title: "Dashboard", description: "Manage your health information", icon: "Assets/service-appointment.svg",link: "/dashboard.html" },
+    { title: "Doctor Profiles", description: "Find the right specialist for you", icon: "Assets/doctor.svg",link:"laks.html" },
+    { title: "Appointment", description: "Book appointments easily", icon: "Assets/service-appointment.svg",link:"register.html" }
 ];
 
 const featuresData = [
@@ -17,18 +17,44 @@ const featuresData = [
     { title: "Dashboard Reports", description: "Detailed patient reports.", icon: "📊" }
 ];
 
+// function loadServices() {
+//     const container = document.getElementById('services-container');
+//     servicesData.forEach(service => {
+//         const card = document.createElement('div');
+//         card.className = 'card';
+//         card.innerHTML = `
+//             <h3>${service.title}</h3>
+//             <img src="${service.icon}" alt="${service.title}">
+//             <p>${service.description}</p>`;
+//         container.appendChild(card);
+//     });
+// }
+
 function loadServices() {
     const container = document.getElementById('services-container');
     servicesData.forEach(service => {
+        // Create a link element
+        const link = document.createElement('a');
+        link.href = service.link;
+        link.style.textDecoration = "none";
+        link.style.color = "inherit";
+
+        // Create a card element
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
             <h3>${service.title}</h3>
-            <img src="${service.icon}" alt="${service.title}">
+            <img src="${service.icon}" alt="${service.title}" style="width: 50px; height: 50px;">
             <p>${service.description}</p>`;
-        container.appendChild(card);
+        
+        // Append the card to the link
+        link.appendChild(card);
+
+        // Append the link to the container
+        container.appendChild(link);
     });
 }
+
 
 function loadFeatures() {
     const container = document.getElementById('features-container');
