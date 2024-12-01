@@ -137,7 +137,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### Contact  
 
-For any questions, please contact **Gaurav Ghosh** at [email@example.com].
+For any questions, please contact **Gaurav Ghosh** at [gauravghosh24005@gmail.com].
 
 ---
 
