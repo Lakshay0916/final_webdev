@@ -7,30 +7,43 @@
     <title>VitaCore-Core Wellness, Vital Health Solutions</title>
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script> <!-- Include Handlebars.js -->
 </head>
 
 <body>
     <div class="main">
-        <nav class="navbar">
-            <div class="navbar-logo">
-                <img src="Assets/logo.png" alt="VitaCore">
-            </div>
+        <!-- Navbar Template -->
+        <script id="navbar-template" type="text/x-handlebars-template">
+            <nav class="navbar">
+                <div class="navbar-logo">
+                    <img src="{{logo}}" alt="VitaCore">
+                </div>
+                <div class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <div class="navbar-links" id="navbar-links">
+                    {{#each navbarLinks}}
+                    <a href="{{url}}" class="{{#if active}}active{{/if}}">{{text}}</a>
+                    {{/each}}
+                </div>
+            </nav>
+        </script>
 
-            <div class="hamburger" id="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
+        <!-- Footer Template -->
+        <script id="footer-template" type="text/x-handlebars-template">
+            <footer class="footer-section">
+                <p>&copy; {{year}} {{companyName}}. All Rights Reserved.</p>
+                <ul class="footer-links">
+                    {{#each footerLinks}}
+                    <li><a href="{{url}}">{{text}}</a></li>
+                    {{/each}}
+                </ul>
+            </footer>
+        </script>
 
-            <div class="navbar-links" id="navbar-links">
-                <a href="/index.html" class="active">Home</a>
-                <a href="/about.html">About</a>
-                <a href="/register.html">Fast-Appointment</a>
-                <a href="#services">Services</a>
-                <a href="/contact.html" class="navbar-contact">Contact US</a>
-            </div>
-        </nav>
-
+        <!-- Content -->
         <main>
             <div class="header">
                 <img src="Assets/img1.svg" alt="Doctor">
@@ -41,11 +54,8 @@
                 <div class="header-contact navbar-contact">
                     <img src="Assets/call.svg" alt="Phone">
                     <span>+91 8116779314</span>
-
                 </div>
-
             </div>
-            <!-- <div class="sepration"></div> -->
 
             <div class="content1">
                 <img width="300" src="Assets/Screenshot_2024-10-01_203209-removebg-preview.png" alt=" img">
@@ -58,16 +68,14 @@
                         </a>
                     </div>
                 </div>
-
             </div>
+
             <div class="content1">
                 <img src="Assets/Screenshot_2024-10-01_203110-removebg-preview.png" alt="">
                 <div class="block1">
                     <div>We provide offline consultancy too!</div>
-
-                    <a target="_blank"
-                        href="https://www.google.co.in/maps/place/BML+Munjal+University+(BMU)/@28.2476758,76.811052,17z/data=!3m1!4b1!4m6!3m5!1s0x390d478e1d59b7fb:0xb1787ccb5563c223!8m2!3d28.2476758!4d76.8136269!16s%2Fm%2F0125spqv?entry=ttu&g_ep=EgoyMDI0MDgyNy4wIKXMDSoASAFQAw%3D%3D"><img
-                            src="Assets/img4.svg" alt="Address"></a>
+                    <a target="_blank" href="https://www.google.co.in/maps/place/BML+Munjal+University+(BMU)/@28.2476758,76.811052,17z/data=!3m1!4b1!4m6!3m5!1s0x390d478e1d59b7fb:0xb1787ccb5563c223!8m2!3d28.2476758!4d76.8136269!16s%2Fm%2F0125spqv?entry=ttu&g_ep=EgoyMDI0MDgyNy4wIKXMDSoASAFQAw%3D%3D">
+                        <img src="Assets/img4.svg" alt="Address"></a>
                 </div>
             </div>
 
@@ -77,8 +85,9 @@
                         <img src="Assets/patient-profile-people.svg" alt="I am a patient">
                         <h3>I am a patient</h3>
                         <p>Say goodbye to boring old appointments, say hello to MyGPConnect.</p>
-                        <a href = "login.html">
-                        <button class="login-btn" >Log in</button></a>
+                        <a href="login.html">
+                            <button class="login-btn">Log in</button>
+                        </a>
                     </div>
                     <div class="card">
                         <img src="Assets/doctor.svg" alt="I am a doctor">
@@ -108,16 +117,45 @@
             </section>
         </main>
 
-        <footer class="footer-section">
-            <p>&copy; 2024 VitaCore. All Rights Reserved.</p>
-            <ul class="footer-links">
-                <li><a href="/about">About Us</a></li>
-                <li><a href="/contactus">Contact Us</a></li>
-                <li><a href="/privacy">Privacy Policy</a></li>
-            </ul>
-        </footer>
+        <!-- Rendered Footer and Navbar -->
+        <div id="navbar-container"></div>
+        <div id="footer-container"></div>
 
         <script>
+            // Data for Navbar and Footer
+            const navbarData = {
+                logo: "Assets/logo.png",
+                navbarLinks: [
+                    { text: "Home", url: "/index.html", active: true },
+                    { text: "About", url: "/about.html", active: false },
+                    { text: "Fast-Appointment", url: "/register.html", active: false },
+                    { text: "Services", url: "#services", active: false },
+                    { text: "Contact US", url: "/contact.html", active: false }
+                ]
+            };
+
+            const footerData = {
+                year: new Date().getFullYear(),
+                companyName: "VitaCore",
+                footerLinks: [
+                    { text: "About Us", url: "/about" },
+                    { text: "Contact Us", url: "/contactus" },
+                    { text: "Privacy Policy", url: "/privacy" }
+                ]
+            };
+
+            // Compile and Render Navbar
+            const navbarTemplateSource = document.getElementById("navbar-template").innerHTML;
+            const navbarTemplate = Handlebars.compile(navbarTemplateSource);
+            const navbarHTML = navbarTemplate(navbarData);
+            document.getElementById("navbar-container").innerHTML = navbarHTML;
+
+            // Compile and Render Footer
+            const footerTemplateSource = document.getElementById("footer-template").innerHTML;
+            const footerTemplate = Handlebars.compile(footerTemplateSource);
+            const footerHTML = footerTemplate(footerData);
+            document.getElementById("footer-container").innerHTML = footerHTML;
+
             // Hamburger menu toggle
             const hamburger = document.getElementById('hamburger');
             const navLinks = document.getElementById('navbar-links');
@@ -148,7 +186,6 @@
                         <h3>${service.title}</h3>
                         <img src="${service.icon}" alt="${service.title}">
                         <p>${service.description}</p>
-                        
                     `;
                     container.appendChild(card);
                 });
@@ -169,39 +206,11 @@
                 });
             }
 
-            // Function for login navigation
-            
-
             // Load services and features on page load
             window.onload = function () {
                 loadServices();
                 loadFeatures();
             };
-
-            // Save and apply theme preference using local storage
-            function setTheme(theme) {
-                document.body.className = theme;
-                localStorage.setItem('theme', theme);
-            }
-
-            function applyTheme() {
-                const theme = localStorage.getItem('theme') || 'default';
-                document.body.className = theme;
-            }
-
-            // Select the button element
-            const bookButton = document.querySelector('.button1');
-
-            // Add an event listener for the 'click' event
-            bookButton.addEventListener('click', () => {
-                // Redirect to the booking page
-                window.location.href = "doctor-login.html"; // Replace with your actual page URL
-            });
-
-
-            applyTheme(); // Apply theme on load
-
-
         </script>
     </div>
 </body>

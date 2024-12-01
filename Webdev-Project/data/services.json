@@ -1,0 +1,19 @@
+{
+    "services": [
+        {
+            "title": "Dashboard",
+            "description": "Manage your health information",
+            "icon": "/Assets/service-appointment.svg"
+        },
+        {
+            "title": "Doctor Profiles",
+            "description": "Find the right specialist for you",
+            "icon": "/Assets/doctor.svg"
+        },
+        {
+            "title": "Appointment",
+            "description": "Book appointments easily",
+            "icon": "/Assets/service-appointment.svg"
+        }
+    ]
+}

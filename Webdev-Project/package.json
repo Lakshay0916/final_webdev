@@ -1,9 +1,20 @@
 {
   "dependencies": {
     "express": "^4.21.1",
+    "express-handlebars": "^8.0.1",
     "mongodb": "^6.11.0",
     "mongoose": "^8.8.3",
     "nodemon": "^3.1.7",
     "path": "^0.12.7"
-  }
+  },
+  "name": "webdev-project",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

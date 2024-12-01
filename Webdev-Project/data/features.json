@@ -1,0 +1,19 @@
+{
+    "features": [
+        {
+            "title": "Simple Appointment Process",
+            "description": "Easy registration and appointment process for first-time visitors.",
+            "icon": "⚡"
+        },
+        {
+            "title": "Hospital On Boarding",
+            "description": "Hospitals can register and provide appointment slots.",
+            "icon": "🏥"
+        },
+        {
+            "title": "Dashboard Reports",
+            "description": "Detailed reports showing patient statistics.",
+            "icon": "📊"
+        }
+    ]
+}

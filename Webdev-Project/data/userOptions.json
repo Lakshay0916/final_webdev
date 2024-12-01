@@ -1,0 +1,16 @@
+{
+    "userOptions": [
+        {
+            "title": "I am a patient",
+            "description": "Say goodbye to boring old appointments, say hello to MyGPConnect.",
+            "icon": "/Assets/patient-profile-people.svg",
+            "loginPage": "/login"
+        },
+        {
+            "title": "I am a doctor",
+            "description": "Your to-do list just got shorter. Find out more about our services.",
+            "icon": "/Assets/doctor.svg",
+            "loginPage": "/doctor-login"
+        }
+    ]
+}
