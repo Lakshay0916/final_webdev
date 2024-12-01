@@ -13,7 +13,7 @@ const multer = require('multer'); // For handling file uploads
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
-
+const { engine } = require('express-handlebars');
 // MongoDB connection
 let dbconnect = require('./connect.js');
 dbconnect(); // Initialize MongoDB connection
@@ -24,10 +24,34 @@ const PORT = 4000;
 // Static file handling
 app.use(express.static('D:/MyWeb/final_webdev/Webdev-Project'));
 
-// Route to serve the HTML file
+
+
+
+app.set("views", path.join(__dirname, "../views"));
+app.use(express.static(path.join(__dirname, "../public")));
+
+app.engine(
+  "handlebars",
+  engine({
+    layoutsDir: path.join(__dirname, "../views"),
+    partialsDir: path.join(__dirname, "../views"),
+    defaultLayout: 'main'
+  })
+);
+
+app.set("view engine", "handlebars");
+
 app.get('/', (req, res) => {
-    res.sendFile(path.join('D:/MyWeb/final_webdev/Webdev-Project', 'index.html'));
+    res.render('index', {
+        title: 'Home Page',
+        message: 'Welcome to the Home Page'
+    });
 });
+
+// Route to serve the HTML file
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join('D:/MyWeb/final_webdev/Webdev-Project', 'index.html'));
+// });
 
 // Middleware
 app.use(cors());
